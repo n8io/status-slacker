@@ -11,7 +11,7 @@ A single company, multiple team status bot for Slack.
 ![Usage](https://i.imgsafe.org/0f5dd594d4.gif)
 
 ## Slack commands
-![Sample](https://i.imgsafe.org/0ee4ae3f41.png)
+![Sample](https://i.imgsafe.org/1430f89e54.png)
 
 ## Requirements
 * A SlackBot token [more info here](https://api.slack.com/bot-users)
