@@ -15,7 +15,7 @@ require('dotenv-safe').load({
   silent: true
 });
 
-const TIC_INTERVAL = 45 * 1000; // every 31 seconds to guarantee it is not fired twice in the same minute;
+const TIC_INTERVAL = 60 * 1000; // once a minute
 const CMD_PREFIX = ':-';
 const COMMANDS = {
   start: {
