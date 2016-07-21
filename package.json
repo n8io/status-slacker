@@ -1,0 +1,43 @@
+{
+  "name": "status-slacker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "botkit.js",
+  "scripts": {
+    "build": "node docker",
+    "clean": "rm -rf node_modules/ build/ docker-compose.yaml",
+    "start": "node $npm_package_main",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "6"
+  },
+  "keywords": [],
+  "author": "Nate Clark",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "body-parser": "^1",
+    "botkit": "^0",
+    "chalk": "^1",
+    "chance": "^1",
+    "compression": "^1",
+    "cookie-parser": "^1",
+    "cors": "^2",
+    "cwd": "^0",
+    "debug": "^2",
+    "dotenv-safe": "^2",
+    "express": "^4",
+    "http-status": "^0",
+    "lodash": "^4.13.1",
+    "method-override": "^2",
+    "moment-timezone": "^0.5.4",
+    "morgan": "^1",
+    "slack": "^7.5.7",
+    "slackbots": "^0",
+    "tinycolor2": "^1"
+  },
+  "devDependencies": {
+    "json2yaml": "^1"
+  }
+}

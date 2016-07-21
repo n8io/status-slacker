@@ -1,0 +1,9 @@
+---
+  web: 
+    build: "."
+    volumes: 
+      - "./src:/src"
+    ports: 
+      - "3000:3000"
+  mongo: 
+    image: "mongo"

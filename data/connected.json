@@ -1,0 +1,793 @@
+{
+  "ok": true,
+  "self": {
+    "id": "U1RUU70N9",
+    "name": "status",
+    "prefs": {
+      "highlight_words": "",
+      "user_colors": "",
+      "color_names_in_list": true,
+      "growls_enabled": true,
+      "tz": null,
+      "push_dm_alert": true,
+      "push_mention_alert": true,
+      "msg_replies": "{ \"flexpane\":false }",
+      "push_everything": true,
+      "push_idle_wait": 2,
+      "push_sound": "b2.mp3",
+      "push_loud_channels": "",
+      "push_mention_channels": "",
+      "push_loud_channels_set": "",
+      "email_alerts": "instant",
+      "email_alerts_sleep_until": 0,
+      "email_misc": true,
+      "email_weekly": true,
+      "welcome_message_hidden": false,
+      "all_channels_loud": true,
+      "loud_channels": "",
+      "never_channels": "",
+      "loud_channels_set": "",
+      "search_sort": "timestamp",
+      "expand_inline_imgs": true,
+      "expand_internal_inline_imgs": true,
+      "expand_snippets": false,
+      "posts_formatting_guide": true,
+      "seen_welcome_2": false,
+      "seen_ssb_prompt": false,
+      "spaces_new_xp_banner_dismissed": false,
+      "search_only_my_channels": false,
+      "search_only_current_team": false,
+      "emoji_mode": "default",
+      "emoji_use": "{\"robot_face\":1}",
+      "has_invited": false,
+      "has_uploaded": false,
+      "has_created_channel": false,
+      "search_exclude_channels": "",
+      "messages_theme": "default",
+      "webapp_spellcheck": true,
+      "no_joined_overlays": false,
+      "no_created_overlays": false,
+      "dropbox_enabled": false,
+      "seen_domain_invite_reminder": false,
+      "seen_member_invite_reminder": false,
+      "mute_sounds": false,
+      "arrow_history": false,
+      "tab_ui_return_selects": true,
+      "obey_inline_img_limit": true,
+      "new_msg_snd": "knock_brush.mp3",
+      "require_at": false,
+      "ssb_space_window": "",
+      "mac_ssb_bounce": "",
+      "mac_ssb_bullet": true,
+      "expand_non_media_attachments": true,
+      "show_typing": true,
+      "pagekeys_handled": true,
+      "last_snippet_type": "",
+      "display_real_names_override": 0,
+      "display_preferred_names": true,
+      "time24": false,
+      "enter_is_special_in_tbt": false,
+      "graphic_emoticons": false,
+      "convert_emoticons": true,
+      "ss_emojis": true,
+      "sidebar_behavior": "",
+      "seen_onboarding_start": false,
+      "onboarding_cancelled": false,
+      "seen_onboarding_slackbot_conversation": false,
+      "seen_onboarding_channels": false,
+      "seen_onboarding_direct_messages": false,
+      "seen_onboarding_invites": false,
+      "seen_onboarding_search": false,
+      "seen_onboarding_recent_mentions": false,
+      "seen_onboarding_starred_items": false,
+      "seen_onboarding_private_groups": false,
+      "onboarding_slackbot_conversation_step": 0,
+      "dnd_enabled": false,
+      "dnd_start_hour": "22:00",
+      "dnd_end_hour": "08:00",
+      "mark_msgs_read_immediately": true,
+      "start_scroll_at_oldest": true,
+      "snippet_editor_wrap_long_lines": false,
+      "ls_disabled": false,
+      "sidebar_theme": "default",
+      "sidebar_theme_custom_values": "",
+      "f_key_search": false,
+      "k_key_omnibox": true,
+      "speak_growls": false,
+      "mac_speak_voice": "com.apple.speech.synthesis.voice.Alex",
+      "mac_speak_speed": 250,
+      "comma_key_prefs": false,
+      "at_channel_suppressed_channels": "",
+      "push_at_channel_suppressed_channels": "",
+      "prompted_for_email_disabling": false,
+      "full_text_extracts": false,
+      "no_text_in_notifications": false,
+      "muted_channels": "",
+      "no_macssb1_banner": false,
+      "no_macssb2_banner": false,
+      "no_winssb1_banner": false,
+      "no_omnibox_in_channels": false,
+      "k_key_omnibox_auto_hide_count": 0,
+      "hide_user_group_info_pane": false,
+      "mentions_exclude_at_user_groups": false,
+      "privacy_policy_seen": true,
+      "search_exclude_bots": false,
+      "load_lato_2": false,
+      "fuller_timestamps": false,
+      "last_seen_at_channel_warning": 0,
+      "flex_resize_window": false,
+      "msg_preview": false,
+      "msg_preview_displaces": true,
+      "msg_preview_persistent": true,
+      "emoji_autocomplete_big": false,
+      "winssb_run_from_tray": true,
+      "winssb_window_flash_behavior": "idle",
+      "two_factor_auth_enabled": false,
+      "two_factor_type": null,
+      "two_factor_backup_type": null,
+      "enhanced_debugging": false,
+      "mentions_exclude_at_channels": true,
+      "confirm_clear_all_unreads": true,
+      "confirm_user_marked_away": true,
+      "box_enabled": false,
+      "seen_single_emoji_msg": false,
+      "confirm_sh_call_start": true,
+      "preferred_skin_tone": "",
+      "show_all_skin_tones": false,
+      "separate_private_channels": false,
+      "whats_new_read": 1468538950,
+      "hotness": false,
+      "frecency_jumper": "",
+      "jumbomoji": true,
+      "no_flex_in_history": true,
+      "newxp_seen_last_message": 0,
+      "attachments_with_borders": false,
+      "show_memory_instrument": false,
+      "channel_sort": "{\"is_custom_sorted\":false, \"priority_display\":false, \"priority_type\":\"\", \"sorts\":[]}",
+      "a11y_font_size": "normal"
+    },
+    "created": 1468538950,
+    "manual_presence": "active"
+  },
+  "team": {
+    "id": "T0BJTEP2P",
+    "name": "n8io",
+    "email_domain": "",
+    "domain": "n8io",
+    "msg_edit_window_mins": -1,
+    "prefs": {
+      "default_channels": [
+        "C0BJTD4PN",
+        "C0BJW38F9"
+      ],
+      "allow_calls": true,
+      "hide_referers": true,
+      "msg_edit_window_mins": -1,
+      "allow_message_deletion": true,
+      "display_real_names": false,
+      "who_can_at_everyone": "regular",
+      "who_can_at_channel": "ra",
+      "who_can_create_channels": "regular",
+      "who_can_archive_channels": "regular",
+      "who_can_create_groups": "ra",
+      "who_can_post_general": "ra",
+      "who_can_kick_channels": "admin",
+      "who_can_kick_groups": "regular",
+      "retention_type": 0,
+      "retention_duration": 0,
+      "group_retention_type": 0,
+      "group_retention_duration": 0,
+      "dm_retention_type": 0,
+      "dm_retention_duration": 0,
+      "file_retention_duration": 0,
+      "file_retention_type": 0,
+      "allow_retention_override": true,
+      "require_at_for_mention": false,
+      "default_rxns": [
+        "simple_smile",
+        "thumbsup",
+        "white_check_mark",
+        "heart",
+        "eyes"
+      ],
+      "team_handy_rxns": {
+        "restrict": false,
+        "list": [
+          {
+            "name": "slightly_smiling_face",
+            "title": "I'm happy!"
+          },
+          {
+            "name": "+1",
+            "title": "good!"
+          },
+          {
+            "name": "white_check_mark",
+            "title": "done!"
+          },
+          {
+            "name": "heart",
+            "title": "love it!"
+          },
+          {
+            "name": "eyes",
+            "title": "looking..."
+          }
+        ]
+      },
+      "channel_handy_rxns": null,
+      "compliance_export_start": 0,
+      "warn_before_at_channel": "always",
+      "disallow_public_file_urls": false,
+      "who_can_create_delete_user_groups": "admin",
+      "who_can_edit_user_groups": "admin",
+      "who_can_change_team_profile": "admin",
+      "allow_shared_channels": false,
+      "who_has_team_visibility": "ra",
+      "invites_only_admins": true,
+      "disable_file_uploads": "allow_all",
+      "who_can_create_shared_channels": "admin",
+      "who_can_manage_shared_channels": {
+        "type": [
+          "admin"
+        ]
+      },
+      "who_can_post_in_shared_channels": {
+        "type": [
+          "regular"
+        ]
+      },
+      "allow_shared_channel_perms_override": false,
+      "dnd_enabled": true,
+      "dnd_start_hour": "22:00",
+      "dnd_end_hour": "08:00",
+      "auth_mode": "normal",
+      "who_can_manage_integrations": {
+        "type": [
+          "regular"
+        ]
+      },
+      "invites_limit": false
+    },
+    "icon": {
+      "image_34": "https://h2.slack-edge.com/66f9/img/avatars-teams/ava_0023-34.png",
+      "image_44": "https://h2.slack-edge.com/b3b7/img/avatars-teams/ava_0023-44.png",
+      "image_68": "https://h2.slack-edge.com/66f9/img/avatars-teams/ava_0023-68.png",
+      "image_88": "https://h2.slack-edge.com/66f9/img/avatars-teams/ava_0023-88.png",
+      "image_102": "https://h2.slack-edge.com/66f9/img/avatars-teams/ava_0023-102.png",
+      "image_132": "https://h2.slack-edge.com/66f9/img/avatars-teams/ava_0023-132.png",
+      "image_230": "https://h2.slack-edge.com/9e9be/img/avatars-teams/ava_0023-230.png",
+      "image_default": true
+    },
+    "over_storage_limit": false,
+    "plan": "",
+    "over_integrations_limit": true
+  },
+  "latest_event_ts": "1468806066.000000",
+  "channels": [
+    {
+      "id": "C0BJU7D0U",
+      "name": "build-hello-world",
+      "is_channel": true,
+      "created": 1443633478,
+      "creator": "U0BJXC95E",
+      "is_archived": false,
+      "is_general": false,
+      "has_pins": false,
+      "is_member": false
+    },
+    {
+      "id": "C0BK0KGH0",
+      "name": "dev-hello-world",
+      "is_channel": true,
+      "created": 1443633217,
+      "creator": "U0BJXC95E",
+      "is_archived": true,
+      "is_general": false,
+      "has_pins": false,
+      "is_member": false
+    },
+    {
+      "id": "C0BJTD4PN",
+      "name": "general",
+      "is_channel": true,
+      "created": 1443632855,
+      "creator": "U0BJXC95E",
+      "is_archived": false,
+      "is_general": true,
+      "has_pins": false,
+      "is_member": false
+    },
+    {
+      "id": "C0BK0J068",
+      "name": "r-hello-world",
+      "is_channel": true,
+      "created": 1443638357,
+      "creator": "U0BJXC95E",
+      "is_archived": false,
+      "is_general": false,
+      "has_pins": false,
+      "is_member": false
+    },
+    {
+      "id": "C0BJW38F9",
+      "name": "random",
+      "is_channel": true,
+      "created": 1443632855,
+      "creator": "U0BJXC95E",
+      "is_archived": false,
+      "is_general": false,
+      "has_pins": false,
+      "is_member": false
+    },
+    {
+      "id": "C1RUSF2HM",
+      "name": "statii",
+      "is_channel": true,
+      "created": 1468538391,
+      "creator": "U0BJXC95E",
+      "is_archived": false,
+      "is_general": false,
+      "has_pins": false,
+      "is_member": true,
+      "last_read": "1468789416.000066",
+      "latest": "1468790078.000068",
+      "members": [
+        "U0BJXC95E",
+        "U1RUU70N9"
+      ],
+      "topic": {
+        "value": "",
+        "creator": "",
+        "last_set": 0
+      },
+      "purpose": {
+        "value": "",
+        "creator": "",
+        "last_set": 0
+      }
+    }
+  ],
+  "groups": [],
+  "ims": [
+    {
+      "id": "D1RT89YH1",
+      "user": "USLACKBOT",
+      "created": 1468538950,
+      "is_im": true,
+      "is_org_shared": false,
+      "has_pins": false,
+      "last_read": "0000000000.000000",
+      "latest": null,
+      "is_open": true
+    },
+    {
+      "id": "D1RV0FWQH",
+      "user": "U0BJXC95E",
+      "created": 1468538950,
+      "is_im": true,
+      "is_org_shared": false,
+      "has_pins": false,
+      "last_read": "0000000000.000000",
+      "latest": "1468804888.000026",
+      "is_open": true
+    }
+  ],
+  "cache_ts": 1468806666,
+  "subteams": {
+    "self": [],
+    "all": []
+  },
+  "dnd": {
+    "dnd_enabled": false,
+    "next_dnd_start_ts": 1,
+    "next_dnd_end_ts": 1,
+    "snooze_enabled": false
+  },
+  "users": [
+    {
+      "id": "U1NBKEEV6",
+      "team_id": "T0BJTEP2P",
+      "name": "johnny.chimpo",
+      "deleted": true,
+      "profile": {
+        "first_name": "Johnny",
+        "last_name": "Chimpo",
+        "avatar_hash": "g2033a2ced99",
+        "real_name": "Johnny Chimpo",
+        "real_name_normalized": "Johnny Chimpo",
+        "email": "kifelodoci@divismail.ru",
+        "image_24": "https://secure.gravatar.com/avatar/2033a2ced99a896221b86b76f039af50.jpg?s=24&d=https%3A%2F%2Fh2.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0024-24.png",
+        "image_32": "https://secure.gravatar.com/avatar/2033a2ced99a896221b86b76f039af50.jpg?s=32&d=https%3A%2F%2Fh2.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0024-32.png",
+        "image_48": "https://secure.gravatar.com/avatar/2033a2ced99a896221b86b76f039af50.jpg?s=48&d=https%3A%2F%2Fh2.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0024-48.png",
+        "image_72": "https://secure.gravatar.com/avatar/2033a2ced99a896221b86b76f039af50.jpg?s=72&d=https%3A%2F%2Fh2.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0024-72.png",
+        "image_192": "https://secure.gravatar.com/avatar/2033a2ced99a896221b86b76f039af50.jpg?s=192&d=https%3A%2F%2Fh2.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0024-192.png",
+        "image_512": "https://secure.gravatar.com/avatar/2033a2ced99a896221b86b76f039af50.jpg?s=512&d=https%3A%2F%2Fh2.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0024-512.png",
+        "fields": null
+      },
+      "presence": "away"
+    },
+    {
+      "id": "U0BJXC95E",
+      "team_id": "T0BJTEP2P",
+      "name": "n8",
+      "deleted": false,
+      "status": null,
+      "color": "9f69e7",
+      "real_name": "Nate Clark",
+      "tz": "America/Indiana/Indianapolis",
+      "tz_label": "Eastern Daylight Time",
+      "tz_offset": -14400,
+      "profile": {
+        "first_name": "Nate",
+        "last_name": "Clark",
+        "title": "CEO",
+        "skype": "",
+        "phone": "",
+        "fields": {
+          "Xf0DB5GC80": {
+            "value": "",
+            "alt": ""
+          }
+        },
+        "avatar_hash": "gf0b1cbb3a96",
+        "real_name": "Nate Clark",
+        "real_name_normalized": "Nate Clark",
+        "email": "n8@n8io.com",
+        "image_24": "https://secure.gravatar.com/avatar/f0b1cbb3a96400250a609d12234c6d93.jpg?s=24&d=https%3A%2F%2Fh2.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0007-24.png",
+        "image_32": "https://secure.gravatar.com/avatar/f0b1cbb3a96400250a609d12234c6d93.jpg?s=32&d=https%3A%2F%2Fh2.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0007-32.png",
+        "image_48": "https://secure.gravatar.com/avatar/f0b1cbb3a96400250a609d12234c6d93.jpg?s=48&d=https%3A%2F%2Fh2.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0007-48.png",
+        "image_72": "https://secure.gravatar.com/avatar/f0b1cbb3a96400250a609d12234c6d93.jpg?s=72&d=https%3A%2F%2Fh2.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0007-72.png",
+        "image_192": "https://secure.gravatar.com/avatar/f0b1cbb3a96400250a609d12234c6d93.jpg?s=192&d=https%3A%2F%2Fh2.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0007-192.png",
+        "image_512": "https://secure.gravatar.com/avatar/f0b1cbb3a96400250a609d12234c6d93.jpg?s=512&d=https%3A%2F%2Fh2.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0007-512.png"
+      },
+      "is_admin": true,
+      "is_owner": true,
+      "is_primary_owner": true,
+      "is_restricted": false,
+      "is_ultra_restricted": false,
+      "is_bot": false,
+      "presence": "active"
+    },
+    {
+      "id": "U1NBC96CE",
+      "team_id": "T0BJTEP2P",
+      "name": "standup",
+      "deleted": true,
+      "profile": {
+        "bot_id": "B1NBLRG7P",
+        "api_app_id": "",
+        "avatar_hash": "6f27c36901fc",
+        "image_24": "https://avatars.slack-edge.com/2016-07-02/56386313366_6f27c36901fc11c9ac06_24.png",
+        "image_32": "https://avatars.slack-edge.com/2016-07-02/56386313366_6f27c36901fc11c9ac06_32.png",
+        "image_48": "https://avatars.slack-edge.com/2016-07-02/56386313366_6f27c36901fc11c9ac06_48.png",
+        "image_72": "https://avatars.slack-edge.com/2016-07-02/56386313366_6f27c36901fc11c9ac06_72.png",
+        "image_192": "https://avatars.slack-edge.com/2016-07-02/56386313366_6f27c36901fc11c9ac06_192.png",
+        "image_512": "https://avatars.slack-edge.com/2016-07-02/56386313366_6f27c36901fc11c9ac06_512.png",
+        "image_1024": "https://avatars.slack-edge.com/2016-07-02/56386313366_6f27c36901fc11c9ac06_512.png",
+        "image_original": "https://avatars.slack-edge.com/2016-07-02/56386313366_6f27c36901fc11c9ac06_original.png",
+        "real_name": "",
+        "real_name_normalized": "",
+        "fields": null
+      },
+      "is_bot": true,
+      "presence": "away"
+    },
+    {
+      "id": "U1RUU70N9",
+      "team_id": "T0BJTEP2P",
+      "name": "status",
+      "deleted": false,
+      "status": null,
+      "color": "e0a729",
+      "real_name": "Status Bot",
+      "tz": null,
+      "tz_label": "Pacific Daylight Time",
+      "tz_offset": -25200,
+      "profile": {
+        "bot_id": "B1RV580JE",
+        "api_app_id": "",
+        "avatar_hash": "e4b07dcccaa2",
+        "image_24": "https://avatars.slack-edge.com/2016-07-17/60529436196_e4b07dcccaa20abee109_24.jpg",
+        "image_32": "https://avatars.slack-edge.com/2016-07-17/60529436196_e4b07dcccaa20abee109_32.jpg",
+        "image_48": "https://avatars.slack-edge.com/2016-07-17/60529436196_e4b07dcccaa20abee109_32.jpg",
+        "image_72": "https://avatars.slack-edge.com/2016-07-17/60529436196_e4b07dcccaa20abee109_32.jpg",
+        "image_192": "https://avatars.slack-edge.com/2016-07-17/60529436196_e4b07dcccaa20abee109_32.jpg",
+        "image_512": "https://avatars.slack-edge.com/2016-07-17/60529436196_e4b07dcccaa20abee109_32.jpg",
+        "image_1024": "https://avatars.slack-edge.com/2016-07-17/60529436196_e4b07dcccaa20abee109_32.jpg",
+        "image_original": "https://avatars.slack-edge.com/2016-07-17/60529436196_e4b07dcccaa20abee109_original.jpg",
+        "first_name": "Status",
+        "last_name": "Bot",
+        "title": "I capture team members' status and report it back to a channel for everyone to enjoy",
+        "real_name": "Status Bot",
+        "real_name_normalized": "Status Bot",
+        "fields": null
+      },
+      "is_admin": false,
+      "is_owner": false,
+      "is_primary_owner": false,
+      "is_restricted": false,
+      "is_ultra_restricted": false,
+      "is_bot": true,
+      "presence": "away"
+    },
+    {
+      "id": "U1RUZL75X",
+      "team_id": "T0BJTEP2P",
+      "name": "status-bot",
+      "deleted": true,
+      "profile": {
+        "bot_id": "B1RUN22U8",
+        "api_app_id": "",
+        "avatar_hash": "8e0b46cb3e24",
+        "image_24": "https://avatars.slack-edge.com/2016-07-14/59979387685_8e0b46cb3e2415587fea_24.png",
+        "image_32": "https://avatars.slack-edge.com/2016-07-14/59979387685_8e0b46cb3e2415587fea_32.png",
+        "image_48": "https://avatars.slack-edge.com/2016-07-14/59979387685_8e0b46cb3e2415587fea_48.png",
+        "image_72": "https://avatars.slack-edge.com/2016-07-14/59979387685_8e0b46cb3e2415587fea_72.png",
+        "image_192": "https://avatars.slack-edge.com/2016-07-14/59979387685_8e0b46cb3e2415587fea_192.png",
+        "image_512": "https://avatars.slack-edge.com/2016-07-14/59979387685_8e0b46cb3e2415587fea_512.png",
+        "image_1024": "https://avatars.slack-edge.com/2016-07-14/59979387685_8e0b46cb3e2415587fea_512.png",
+        "image_original": "https://avatars.slack-edge.com/2016-07-14/59979387685_8e0b46cb3e2415587fea_original.png",
+        "real_name": "",
+        "real_name_normalized": "",
+        "fields": null
+      },
+      "is_bot": true,
+      "presence": "away"
+    },
+    {
+      "id": "U1NBQTLQM",
+      "team_id": "T0BJTEP2P",
+      "name": "statushero",
+      "deleted": true,
+      "profile": {
+        "bot_id": "B1NBE4A4C",
+        "api_app_id": "A0FRKLJDA",
+        "first_name": "Status Hero",
+        "avatar_hash": "3c9937f01a35",
+        "image_24": "https://avatars.slack-edge.com/2016-07-02/56388147652_3c9937f01a352c41661d_24.png",
+        "image_32": "https://avatars.slack-edge.com/2016-07-02/56388147652_3c9937f01a352c41661d_32.png",
+        "image_48": "https://avatars.slack-edge.com/2016-07-02/56388147652_3c9937f01a352c41661d_48.png",
+        "image_72": "https://avatars.slack-edge.com/2016-07-02/56388147652_3c9937f01a352c41661d_72.png",
+        "image_192": "https://avatars.slack-edge.com/2016-07-02/56388147652_3c9937f01a352c41661d_192.png",
+        "image_512": "https://avatars.slack-edge.com/2016-07-02/56388147652_3c9937f01a352c41661d_512.png",
+        "image_1024": "https://avatars.slack-edge.com/2016-07-02/56388147652_3c9937f01a352c41661d_1024.png",
+        "image_original": "https://avatars.slack-edge.com/2016-07-02/56388147652_3c9937f01a352c41661d_original.png",
+        "real_name": "Status Hero",
+        "real_name_normalized": "Status Hero",
+        "fields": null
+      },
+      "is_bot": true,
+      "presence": "away"
+    },
+    {
+      "id": "U1NC9HXLM",
+      "team_id": "T0BJTEP2P",
+      "name": "subot",
+      "deleted": true,
+      "profile": {
+        "bot_id": "B1NCFUAP3",
+        "api_app_id": "A12ESD9UH",
+        "first_name": "Subot",
+        "avatar_hash": "bf6a196634fb",
+        "image_24": "https://avatars.slack-edge.com/2016-07-02/56417359047_bf6a196634fbd7cf2ff5_24.png",
+        "image_32": "https://avatars.slack-edge.com/2016-07-02/56417359047_bf6a196634fbd7cf2ff5_32.png",
+        "image_48": "https://avatars.slack-edge.com/2016-07-02/56417359047_bf6a196634fbd7cf2ff5_48.png",
+        "image_72": "https://avatars.slack-edge.com/2016-07-02/56417359047_bf6a196634fbd7cf2ff5_72.png",
+        "image_192": "https://avatars.slack-edge.com/2016-07-02/56417359047_bf6a196634fbd7cf2ff5_192.png",
+        "image_512": "https://avatars.slack-edge.com/2016-07-02/56417359047_bf6a196634fbd7cf2ff5_512.png",
+        "image_1024": "https://avatars.slack-edge.com/2016-07-02/56417359047_bf6a196634fbd7cf2ff5_512.png",
+        "image_original": "https://avatars.slack-edge.com/2016-07-02/56417359047_bf6a196634fbd7cf2ff5_original.png",
+        "real_name": "Subot",
+        "real_name_normalized": "Subot",
+        "fields": null
+      },
+      "is_bot": true,
+      "presence": "away"
+    },
+    {
+      "id": "USLACKBOT",
+      "team_id": "T0BJTEP2P",
+      "name": "slackbot",
+      "deleted": false,
+      "status": null,
+      "color": "757575",
+      "real_name": "slackbot",
+      "tz": null,
+      "tz_label": "Pacific Daylight Time",
+      "tz_offset": -25200,
+      "profile": {
+        "first_name": "slackbot",
+        "last_name": "",
+        "image_24": "https://h2.slack-edge.com/0180/img/slackbot_24.png",
+        "image_32": "https://h2.slack-edge.com/2fac/plugins/slackbot/assets/service_32.png",
+        "image_48": "https://h2.slack-edge.com/2fac/plugins/slackbot/assets/service_48.png",
+        "image_72": "https://h2.slack-edge.com/0180/img/slackbot_72.png",
+        "image_192": "https://h2.slack-edge.com/66f9/img/slackbot_192.png",
+        "image_512": "https://h2.slack-edge.com/1801/img/slackbot_512.png",
+        "avatar_hash": "sv1444671949",
+        "real_name": "slackbot",
+        "real_name_normalized": "slackbot",
+        "email": null,
+        "fields": null
+      },
+      "is_admin": false,
+      "is_owner": false,
+      "is_primary_owner": false,
+      "is_restricted": false,
+      "is_ultra_restricted": false,
+      "is_bot": false,
+      "presence": "active"
+    }
+  ],
+  "cache_version": "v13-tiger",
+  "cache_ts_version": "v1-cat",
+  "bots": [
+    {
+      "id": "B0BJY69UY",
+      "deleted": false,
+      "name": "Codeship",
+      "icons": {
+        "image_36": "https://h2.slack-edge.com/205a/img/services/codeship_36.png",
+        "image_48": "https://h2.slack-edge.com/7bf4/img/services/codeship_48.png",
+        "image_72": "https://h2.slack-edge.com/205a/img/services/codeship_72.png"
+      }
+    },
+    {
+      "id": "B0BK0KH42",
+      "deleted": false,
+      "name": "Bitbucket",
+      "icons": {
+        "image_36": "https://h2.slack-edge.com/12b5a/plugins/bitbucket/assets/service_36.png",
+        "image_48": "https://h2.slack-edge.com/12b5a/plugins/bitbucket/assets/service_48.png",
+        "image_72": "https://h2.slack-edge.com/12b5a/plugins/bitbucket/assets/service_72.png"
+      }
+    },
+    {
+      "id": "B0BKHG10C",
+      "deleted": false,
+      "name": "DockerHub",
+      "icons": {
+        "image_36": "https://h2.slack-edge.com/12b5a/plugins/tester/assets/service_36.png",
+        "image_48": "https://h2.slack-edge.com/12b5a/plugins/tester/assets/service_48.png",
+        "image_72": "https://h2.slack-edge.com/12b5a/plugins/tester/assets/service_72.png"
+      }
+    },
+    {
+      "id": "B1RUUS895",
+      "deleted": false,
+      "name": "slash-command",
+      "icons": {
+        "image_36": "https://h2.slack-edge.com/12b5a/plugins/slash_commands/assets/service_36.png",
+        "image_48": "https://h2.slack-edge.com/12b5a/plugins/slash_commands/assets/service_48.png",
+        "image_72": "https://h2.slack-edge.com/12b5a/plugins/slash_commands/assets/service_72.png"
+      }
+    },
+    {
+      "id": "B1RV580JE",
+      "deleted": false,
+      "name": "bot",
+      "icons": {
+        "image_36": "https://h2.slack-edge.com/2fac/plugins/bot/assets/service_36.png",
+        "image_48": "https://h2.slack-edge.com/2fac/plugins/bot/assets/service_48.png",
+        "image_72": "https://h2.slack-edge.com/12b5a/plugins/bot/assets/service_72.png"
+      }
+    },
+    {
+      "id": "B1SEZCT2B",
+      "deleted": false,
+      "name": "Slack API Tester",
+      "icons": {
+        "image_36": "https://h2.slack-edge.com/b48b/plugins/slack_api_news/assets/service_36.png",
+        "image_48": "https://h2.slack-edge.com/b48b/plugins/slack_api_news/assets/service_48.png",
+        "image_72": "https://h2.slack-edge.com/b48b/plugins/slack_api_news/assets/service_72.png"
+      }
+    },
+    {
+      "id": "B0BK044KB",
+      "deleted": true,
+      "name": "gdrive"
+    },
+    {
+      "id": "B1NBA5QTW",
+      "deleted": true,
+      "name": "StandupBot",
+      "icons": {
+        "image_36": "https://h2.slack-edge.com/12b5a/plugins/slash_commands/assets/service_36.png",
+        "image_48": "https://h2.slack-edge.com/12b5a/plugins/slash_commands/assets/service_48.png",
+        "image_72": "https://h2.slack-edge.com/12b5a/plugins/slash_commands/assets/service_72.png"
+      }
+    },
+    {
+      "id": "B1NBX8VBK",
+      "deleted": true,
+      "name": "Status Hero",
+      "icons": {
+        "image_36": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_36.png",
+        "image_48": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_48.png",
+        "image_72": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_72.png"
+      }
+    },
+    {
+      "id": "B1NC1C554",
+      "deleted": true,
+      "name": "IFTTT",
+      "icons": {
+        "image_36": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2015-08-24/9616536929_8a80d25b2c339c5e23fe_36.jpg",
+        "image_48": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2015-08-24/9616536929_8a80d25b2c339c5e23fe_48.jpg",
+        "image_72": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2015-08-24/9616536929_8a80d25b2c339c5e23fe_72.jpg"
+      }
+    },
+    {
+      "id": "B1NBE4A4C",
+      "deleted": true,
+      "name": "Status Hero",
+      "icons": {
+        "image_36": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_36.png",
+        "image_48": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_48.png",
+        "image_72": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_72.png"
+      }
+    },
+    {
+      "id": "B1NBGBCBG",
+      "deleted": true,
+      "name": "Status Hero",
+      "icons": {
+        "image_36": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_36.png",
+        "image_48": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_48.png",
+        "image_72": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_72.png"
+      }
+    },
+    {
+      "id": "B1NBQTLTF",
+      "deleted": true,
+      "name": "Status Hero",
+      "icons": {
+        "image_36": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_36.png",
+        "image_48": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_48.png",
+        "image_72": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-03-23/29096426775_ab483436bd62ee287a7b_72.png"
+      }
+    },
+    {
+      "id": "B1NCFUAP3",
+      "deleted": true,
+      "name": "Subot",
+      "icons": {
+        "image_36": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-04-20/36495624448_5b9fd4d0d72fd0fd7994_36.png",
+        "image_48": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-04-20/36495624448_5b9fd4d0d72fd0fd7994_48.png",
+        "image_72": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-04-20/36495624448_5b9fd4d0d72fd0fd7994_72.png"
+      }
+    },
+    {
+      "id": "B1NCFUARF",
+      "deleted": true,
+      "name": "Subot",
+      "icons": {
+        "image_36": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-04-20/36495624448_5b9fd4d0d72fd0fd7994_36.png",
+        "image_48": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-04-20/36495624448_5b9fd4d0d72fd0fd7994_48.png",
+        "image_72": "https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2016-04-20/36495624448_5b9fd4d0d72fd0fd7994_72.png"
+      }
+    },
+    {
+      "id": "B1NBLRG7P",
+      "deleted": true,
+      "name": "bot",
+      "icons": {
+        "image_36": "https://h2.slack-edge.com/2fac/plugins/bot/assets/service_36.png",
+        "image_48": "https://h2.slack-edge.com/2fac/plugins/bot/assets/service_48.png",
+        "image_72": "https://h2.slack-edge.com/12b5a/plugins/bot/assets/service_72.png"
+      }
+    },
+    {
+      "id": "B1RUN22U8",
+      "deleted": true,
+      "name": "bot",
+      "icons": {
+        "image_36": "https://h2.slack-edge.com/2fac/plugins/bot/assets/service_36.png",
+        "image_48": "https://h2.slack-edge.com/2fac/plugins/bot/assets/service_48.png",
+        "image_72": "https://h2.slack-edge.com/12b5a/plugins/bot/assets/service_72.png"
+      }
+    }
+  ],
+  "url": "wss://mpmulti-9aag.slack-msgs.com/websocket/RZjR1WM4TaHkPXLedRQ4ncSiTAbMbocaAm1L_u9gLekH03ftsdXp0LNeDF72UvXNkDuCaZzaBv_KKPJ4u0fUrrgcVfOs2BzY6T8zZtsIeq3ZNxf4E4nC9aR--6KTMSxVHIi3I_J4NYfHWcn-NjYM0z5OKmIImNBVevlCn0S1bO4="
+}

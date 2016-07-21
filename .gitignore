@@ -1,0 +1,8 @@
+build/
+node_modules/
+*.log
+
+.env*
+data/configs.json
+!.env.sample
+docker-compose.json
