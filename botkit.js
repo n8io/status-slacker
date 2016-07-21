@@ -40,11 +40,11 @@ const COMMANDS = {
   }
 };
 const MESSAGES = {
-  start: 'Hey there ${user.profile.first_name}, I need your status. Type \`${COMMANDS.start.text}\` to get started.', // This is a string and not templates on purpose
+  start: 'Hey there ${user.profile.first_name}, I need your status. Type \`${COMMANDS.start.text}\` to get started.', // This is a string and not a template on purpose
   stop: `Status update stopped. Type \`${COMMANDS.start.text}\` to start over.`,
-  confirmation: 'Thanks, we\'re all set :thumbsup:. View the #${user.channel} channel to see your summary.', // This is a string and not templates on purpose
+  confirmation: 'Thanks, we\'re all set :thumbsup:. View the #${user.channel} channel to see your summary.', // This is a string and not a template on purpose
   timeout: `I feel neglected, plus you took too long. Type \`${COMMANDS.start.text}\` to start over.`,
-  statusTitle: '*Status summary for ${statusSummary.user.profile.real_name}* @${statusSummary.user.name}', // This is a string and not templates on purpose
+  statusTitle: '*Status summary for ${statusSummary.user.profile.real_name}* @${statusSummary.user.name}', // This is a string and not a template on purpose
   signUp: `Your team is not currently configured with *${process.env.SLACK_BOT_NAME}*. Send a request to your team lead to get setup.`
 };
 const store = {}; // In memory datastore for team and users info
@@ -66,7 +66,6 @@ const onSmartBotStart = new Bluebird((resolve, reject) => {
         return reject(err);
       }
 
-      // fs.writeFileSync(cwd('data/connected.json'), JSON.stringify(payload, null, 2), 'utf-8');
       store.team = payload.team;
       store.users = payload.users.filter(u => !u.deleted && !!u.profile);
 
