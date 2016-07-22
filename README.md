@@ -38,6 +38,8 @@ To view debug messages:
 3. Flesh out front end for configuration management
   1. Add in global holiday calendar
   2. Add in user holiday calendar
+    1. Allow users to declare themselves on holiday via `:-holiday` command
+    2. Allow users to undeclare themselves on holiday via `:-unholiday` command
 4. Create a public docker image
 5. Implement custom team name per configuration
 6. Implement custom icon url per configuration
