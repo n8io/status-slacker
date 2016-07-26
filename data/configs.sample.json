@@ -2,7 +2,9 @@
   {
     "id": "< Identifier for configuration. *** Currently unused *** >",
     "botIconUrl": "< url for custom bot icon. Remove or leave blank if you want to fallback to the default bot icon. *** Currently unused *** >",
-    "channel": "< channel to report summaries >",
+    "channels": [
+      "< channel to report summaries >"
+    ],
     "tz": "< Timezone for notification times. See http://momentjs.com/timezone for more details. E.g. America/New_York >",
     "schedules": [
       {

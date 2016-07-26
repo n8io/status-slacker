@@ -53,7 +53,7 @@ prLoader.load = (msg) => {
     before: msg,
     after: output,
     matches: urlMatches
-  }, null, 2));
+  }));
 
   return output;
 

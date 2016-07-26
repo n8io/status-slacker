@@ -42,7 +42,7 @@ ticketLoader.load = (msg, urlBase = process.env.ISSUE_BASE_URL) => {
     before: msg,
     after: output,
     matches: uniqueMatches
-  }, null, 2));
+  }));
 
   return output;
 };
