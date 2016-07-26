@@ -34,6 +34,10 @@ const COMMANDS = {
     text: `${CMD_PREFIX}usage`,
     info: 'Provides a few usage examples'
   },
+  config: {
+    text: `${CMD_PREFIX}config`,
+    info: 'Starts the config dialogue.'
+  },
   help: {
     text: `${CMD_PREFIX}help`,
     info: 'Presents this help text.'
@@ -110,7 +114,7 @@ smartBot.hears([COMMANDS.start.text], ['direct_message'], (bot, userMsg) => {
       wireUpConvoEndHandler(userMsg.user, convo);
     }
 
-    const responseDebug = require(cwd('app/lib/appDebug'))('botkit:receive:response');
+    const responseDebug = require(cwd('app/lib/appDebug'))('receive:response');
 
     responseDebug(JSON.stringify(response));
 
@@ -156,6 +160,27 @@ smartBot.hears([COMMANDS.questions.text], ['direct_message'], (bot, userMsg) => 
 
 smartBot.hears([COMMANDS.usage.text], ['direct_message'], (bot, userMsg) => {
   sendUsageMessage(userMsg.user);
+});
+
+smartBot.hears([COMMANDS.config.text], ['direct_message'], (bot, userMsg) => {
+  const config = getConfig(userMsg.user);
+
+  if (!config) {
+    // User is not in any config, requires setup
+    sendSignUpMessage(userMsg.user);
+
+    return;
+  }
+
+  const user = getUser(userMsg.user);
+
+  if (!(config.admins || []).find(a => a.username === user.name)) {
+    sendSimpleMessage(userMsg.user, 'Sorry, only admins can view configuration.');
+
+    return;
+  }
+
+  sendSimpleMessage(user.name, `\`\`\`${JSON.stringify(config, null, 2)}\`\`\``);
 });
 
 function startStatusConversation(username) {
@@ -235,14 +260,14 @@ function sendUsageMessage(username) {
 }
 
 function sendStoppedMessage(username) {
-  const stopMessageDebug = require(cwd('app/lib/appDebug'))('botkit:send:stopped-message');
+  const stopMessageDebug = require(cwd('app/lib/appDebug'))('send:stopped-message');
 
   stopMessageDebug(JSON.stringify(username));
   sendSimpleMessage(username, MESSAGES.stop);
 }
 
 function sendQuestionsMessage(username) {
-  const questionsMessageDebug = require(cwd('app/lib/appDebug'))('botkit:send:questions-message');
+  const questionsMessageDebug = require(cwd('app/lib/appDebug'))('send:questions-message');
   const config = getConfig(username);
 
   if (!config) {
@@ -272,7 +297,7 @@ function sendStatusSummary(statusSummary, userId) {
     attachmentsBuilder.build(statusSummary)
   );
 
-  const statusSummaryDebug = require(cwd('app/lib/appDebug'))('botkit:send:statusSummary');
+  const statusSummaryDebug = require(cwd('app/lib/appDebug'))('send:statusSummary');
 
   statusSummaryDebug(JSON.stringify(statusSummary));
 

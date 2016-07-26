@@ -30,7 +30,7 @@ A single company, multiple team status bot for Slack.
 
 ## Troubleshooting
 To view debug messages:
-`DEBUG=botkit* npm start`
+`DEBUG=status-slacker* npm start`
 
 ## TODOs
 1. Enable the same user to be on multiple teams. Currently a single user can only belong to a single team status configuration.
