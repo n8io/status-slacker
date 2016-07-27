@@ -16,6 +16,7 @@ const debugStopMessage = require(debugDefaultPath)('send:stopped-message');
 const debugSendSnippet = require(debugDefaultPath)('send:snippet');
 const debugQuestionsMessages = require(debugDefaultPath)('send:questions-message');
 const debugStatusSummary = require(debugDefaultPath)('send:status-summary');
+const debugUserSettings = require(debugDefaultPath)('send:user-settings');
 const debugSimpleSend = require(debugDefaultPath)('send:simple-message');
 
 // Load in .env
@@ -40,6 +41,10 @@ const COMMANDS = {
     text: `${CMD_PREFIX}questions`,
     info: 'Lists out the set of questions that will be asked.'
   },
+  me: {
+    text: `${CMD_PREFIX}me`,
+    info: 'Shows your user settings.'
+  },
   usage: {
     text: `${CMD_PREFIX}usage`,
     info: 'Provides a few usage examples.'
@@ -61,7 +66,8 @@ const MESSAGES = {
   statusTitle: '*${config.id} status summary for ${statusSummary.user.profile.real_name}* @${statusSummary.user.name}', // This is a string and not a template on purpose
   signUp: `Your team is not currently configured with *${process.env.SLACK_BOT_NAME}*. Send a request to your team lead to get setup.`,
   noAccess: 'You do not have access to view configurations.',
-  whichTeam: 'Which team? Please enter a number [1-${accessibleConfigs.length}]'
+  whichTeam: 'Which team? Please enter a number [1-${accessibleConfigs.length}]',
+  settingsIntro: 'Here are your settings'
 };
 const store = {}; // In memory datastore for team and users info
 const dumbBot = new SlackBot({
@@ -258,6 +264,10 @@ smartBot.hears([COMMANDS.config.text], ['direct_message'], (bot, userMsg) => {
   }
 });
 
+smartBot.hears([COMMANDS.me.text], ['direct_message'], (bot, userMsg) => {
+  sendUserSettings(userMsg.user);
+});
+
 function startStatusConversation(username, configId) {
   const users = getConfiguredUsers(username, configId);
 
@@ -439,12 +449,57 @@ function sendConfigMessage(username, config) {
   sendSnippet(username, title, JSON.stringify(config, null, 2), 'javascript');
 }
 
+function sendUserSettings(username) {
+  const user = getSlackUser(username);
+  const configs = getUserConfigs(user.name);
+  const settingsIntro = `${MESSAGES.settingsIntro}`;
+
+  const attachments = configs.map(config => {
+    const member = config.members.find(m => m.username === user.name);
+
+    return buildUserSettingsAttacment(config, member);
+  });
+
+  const message = slackifyMessage(settingsIntro, '', attachments);
+
+  debugUserSettings(JSON.stringify(message));
+
+  dumbBot.postMessageToUser(user.name, '', message);
+
+  function buildUserSettingsAttacment(config, member) {
+    let msg = _.keys(member)
+      .filter(key => key !== 'username')
+      .map(key => `${_.capitalize(key)}: ${member[key]}`)
+      .join('\n') || `Color: ${process.env.ANSWER_FALLBACK_HEX_COLOR} (default)`
+      ;
+
+    if ((config.admins || []).find(a => a.username === member.username)) {
+      msg = `Admin: true\n${msg}`;
+    }
+
+    const attachment = {
+      /* eslint-disable camelcase */
+      fallback: '',
+      color: member.color || process.env.ANSWER_FALLBACK_HEX_COLOR,
+      pretext: `*${config.id}*`,
+      mrkdwn_in: [
+        'pretext',
+        'text'
+      ],
+      text: msg
+      /* eslint-enable camelcase */
+    };
+
+    return attachment;
+  }
+}
+
 function sendSimpleMessage(username, msg) {
   const user = getSlackUser(username);
 
   const message = slackifyMessage(msg);
 
-  debugSimpleSend(debug.c.cyan(JSON.stringify(message)));
+  debugSimpleSend(JSON.stringify(message));
 
   dumbBot.postMessageToUser(user.name, '', message);
 }
@@ -568,12 +623,12 @@ function processNowForCheckins() {
   });
 }
 
-function slackifyMessage(origMessage, wrapChar = '', attachments = []) {
+function slackifyMessage(origMessage, wrapChar = '', attachments = [], overrides = {}) {
   const message = {
     /* eslint-disable camelcase */
-    mrkdwn: true,
-    link_names: true,
-    parse: 'none',
+    mrkdwn: overrides.mrkdown || true,
+    link_names: overrides.link_names || true,
+    parse: overrides.parse || 'none',
     text: `${wrapChar}${origMessage}${wrapChar}`,
     attachments: attachments
     /* eslint-enable camelcase */
