@@ -38,11 +38,11 @@ const COMMANDS = {
   },
   questions: {
     text: `${CMD_PREFIX}questions`,
-    info: 'Lists out the set of questions that will be asked'
+    info: 'Lists out the set of questions that will be asked.'
   },
   usage: {
     text: `${CMD_PREFIX}usage`,
-    info: 'Provides a few usage examples'
+    info: 'Provides a few usage examples.'
   },
   config: {
     text: `${CMD_PREFIX}config`,
@@ -59,7 +59,9 @@ const MESSAGES = {
   confirmation: 'Thanks, we\'re all set :thumbsup:. I\'ve posted your summary in the ${channels}.', // This is a string and not a template on purpose
   timeout: `I feel neglected, plus you took too long. Type \`${COMMANDS.start.text}\` to start over.`,
   statusTitle: '*${config.id} status summary for ${statusSummary.user.profile.real_name}* @${statusSummary.user.name}', // This is a string and not a template on purpose
-  signUp: `Your team is not currently configured with *${process.env.SLACK_BOT_NAME}*. Send a request to your team lead to get setup.`
+  signUp: `Your team is not currently configured with *${process.env.SLACK_BOT_NAME}*. Send a request to your team lead to get setup.`,
+  noAccess: 'You do not have access to view configurations.',
+  whichTeam: 'Which team? Please enter a number [1-${accessibleConfigs.length}]'
 };
 const store = {}; // In memory datastore for team and users info
 const dumbBot = new SlackBot({
@@ -119,7 +121,7 @@ smartBot.hears([COMMANDS.start.text], ['direct_message'], (bot, userMsg) => {
     return;
   }
   else if (configs.length > 1) {
-    const leadMsg = `Which team? Please enter a number [1-${configs.length}]`;
+    const leadMsg = MESSAGES.whichTeam.replace(/\$\{configs\.length\}/, `${configs.length}`);
     const configMsg = configs.map((config, index) => `${index + 1}) ${config.id}`).join('\n>');
     let selectedConfigIndex = -1; // eslint-disable-line no-unused-vars
 
@@ -220,25 +222,21 @@ smartBot.hears([COMMANDS.config.text], ['direct_message'], (bot, userMsg) => {
   const accessibleConfigs = configs.filter(config => config.admins.find(a => a.username === user.name));
 
   if (!accessibleConfigs.length) {
-    sendSimpleMessage(userMsg.user, 'You do not have access to view configurations.');
+    sendSimpleMessage(userMsg.user, MESSAGES.noAccess);
 
     return;
   }
 
   if (accessibleConfigs.length > 1) {
-    const leadMsg = `Which team? Please enter a number [1-${accessibleConfigs.length}]`;
+    const leadMsg = MESSAGES.whichTeam.replace(/\$\{configs\.length\}/, `${accessibleConfigs.length}`);
     const configMsg = accessibleConfigs.map((config, index) => `${index + 1}) ${config.id}`).join('\n>');
-    let selectedConfigIndex = -1; // eslint-disable-line no-unused-vars
 
     bot.startConversation(userMsg, (err, convo) => {
       const choices = accessibleConfigs.map((config, index) => { // eslint-disable-line arrow-body-style
         return {
           pattern: (index + 1).toString(),
           callback: (response, convo) => {
-            selectedConfigIndex = index;
-            const title = `${_.snakeCase(accessibleConfigs[index].id).replace(/[_]/ig, '-')}.json`;
-
-            sendSnippet(user.name, title, JSON.stringify(accessibleConfigs[index], null, 2), 'javascript');
+            sendConfigMessage(user.name, accessibleConfigs[index]);
             convo.next();
           }
         };
@@ -256,7 +254,7 @@ smartBot.hears([COMMANDS.config.text], ['direct_message'], (bot, userMsg) => {
     });
   }
   else if (accessibleConfigs.length === 1) {
-    sendSimpleMessage(user.name, `*${accessibleConfigs[0].id}* config:\n\`\`\`${JSON.stringify(accessibleConfigs[0], null, 2)}\`\`\``);
+    sendConfigMessage(user.name, accessibleConfigs[0]);
   }
 });
 
@@ -433,6 +431,12 @@ function sendStatusSummary(statusSummary, config) {
 
 function sendSignUpMessage(username) {
   sendSimpleMessage(username, MESSAGES.signUp);
+}
+
+function sendConfigMessage(username, config) {
+  const title = `${_.snakeCase(config.id).replace(/[_]/ig, '-')}.json`;
+
+  sendSnippet(username, title, JSON.stringify(config, null, 2), 'javascript');
 }
 
 function sendSimpleMessage(username, msg) {
