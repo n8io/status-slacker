@@ -33,7 +33,7 @@ To view debug messages:
 `DEBUG=status-slacker* npm start`
 
 ## TODOs
-1. ~Enable the same user to be on multiple teams. Currently a single user can only belong to a single team status configuration.~
+1. ~~Enable the same user to be on multiple teams. Currently a single user can only belong to a single team status configuration.~~
 2. Break bot code into a more maintainable project structure
 3. Flesh out front end for configuration management
   1. Add in global holiday calendar
@@ -41,5 +41,5 @@ To view debug messages:
     1. Allow users to declare themselves on holiday via `:-holiday` command
     2. Allow users to undeclare themselves on holiday via `:-unholiday` command
 4. Create a public docker image
-5. ~Implement custom team name per configuration~
+5. ~~Implement custom team name per configuration~~
 6. Implement custom icon url per configuration
