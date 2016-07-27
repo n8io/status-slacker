@@ -1,18 +1,24 @@
 [
   {
-    "id": "< Identifier for configuration. *** Currently unused *** >",
-    "botIconUrl": "< url for custom bot icon. Remove or leave blank if you want to fallback to the default bot icon. *** Currently unused *** >",
-    "channel": "< channel to report summaries >",
-    "tz": "< Timezone for notification times. See http://momentjs.com/timezone for more details. E.g. America/New_York >",
+    "id": "< Identifier for configuration. E.g., Team Falcon, Team Nighthawk, Marketing >",
+    "channels": [
+      "< channel to report summaries, sans the leading '#'. E.g. team-channel-name >"
+    ],
+    "tz": "< Timezone for notification date/times. See http://momentjs.com/timezone for more details. E.g. America/New_York >",
     "schedules": [
       {
-        "day": "Must be a number representing the day of week. E.g. 0 (Sunday) or 7 (Saturday)",
+        "day": "Must be a number representing the day of week. E.g. 0 (Sunday) or 6 (Saturday)",
         "hour": "Must be a number representing the hour of the day. Military time. 0-23",
-        "minute": "Must be a number representing the minute of the day. 0-59"
+        "minute": "Must be a number representing the minute of the hour. 0-59"
       }
     ],
     "questions": [
       "< What did you get work on... ? Note order is preserved >"
+    ],
+    "admins": [
+      {
+        "username": "< Slack username sans '@'. E.g. nate.clark >"
+      }
     ],
     "members": [
       {
