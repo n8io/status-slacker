@@ -416,6 +416,12 @@ function sendStoppedMessage(username) {
 function sendQuestionsMessages(username, configId) {
   const configs = getUserConfigs(username, configId);
 
+  if (!configs || !configs.length) {
+    sendSignUpMessage(username);
+
+    return;
+  }
+
   configs.forEach(config => {
     const questionsMessages = config.questions.map((question, index) => `\n>${index + 1}) _${question}_`).join('');
     const message = `Here are the questions you will be asked for *${config.id}*:${questionsMessages}`;
@@ -458,7 +464,14 @@ function sendConfigMessage(username, config) {
 
 function sendUserSettings(username) {
   const user = getSlackUser(username);
-  const configs = getUserConfigs(user.name);
+  const configs = getUserConfigs(username);
+
+  if (!configs || !configs.length) {
+    sendSignUpMessage(username);
+
+    return;
+  }
+
   const settingsIntro = `${MESSAGES.settingsIntro}`;
 
   const attachments = configs.map(config => {
