@@ -11,6 +11,7 @@ const attachmentsBuilder = require(cwd('app/lib/attachmentsBuilder'));
 
 // Load debuggers
 const debugDefaultPath = cwd('app/lib/appDebug');
+const debugTicToc = require(debugDefaultPath)('tic');
 const debugReceiveResponse = require(debugDefaultPath)('receive:response');
 const debugStopMessage = require(debugDefaultPath)('send:stopped-message');
 const debugSendSnippet = require(debugDefaultPath)('send:snippet');
@@ -66,7 +67,7 @@ const MESSAGES = {
   statusTitle: '*${config.id} status summary for ${statusSummary.user.profile.real_name}* @${statusSummary.user.name}', // This is a string and not a template on purpose
   signUp: `Your team is not currently configured with *${process.env.SLACK_BOT_NAME}*. Send a request to your team lead to get setup.`,
   noAccess: 'You do not have access to view configurations.',
-  whichTeam: 'Which team? Please enter a number [1-${accessibleConfigs.length}]',
+  whichTeam: 'Which team? Please enter a number [1-${configs.length}]',
   settingsIntro: 'Here are your settings'
 };
 const store = {}; // In memory datastore for team and users info
@@ -268,21 +269,22 @@ smartBot.hears([COMMANDS.me.text], ['direct_message'], (bot, userMsg) => {
   sendUserSettings(userMsg.user);
 });
 
-function startStatusConversation(username, configId) {
-  const users = getConfiguredUsers(username, configId);
-
-  if (users.length) {
-    return;
+function startStatusConversation(config) {
+  if (!config || !config.members || !config.members.length) {
+    return; // No configured users, nothing to do
   }
 
-  users.forEach(user => {
+  console.log(JSON.stringify({config: config}, null, 2));
+
+  config.members.forEach(member => {
+    const user = getSlackUser(member.username);
     const introMessage = slackifyMessage(MESSAGES.start
       .replace(/\$\{user\.profile\.first_name\}/ig, `${user.profile.first_name}`)
-      .replace(/\$\{configId\}/ig, `${configId}`)
+      .replace(/\$\{configId\}/ig, `${config.id}`)
       .replace(/\$\{COMMANDS\.start\.text\}/ig, `${COMMANDS.start.text}`)
     );
 
-    dumbBot.postMessageToUser(username, '', introMessage);
+    dumbBot.postMessageToUser(member.username, '', introMessage);
   });
 }
 
@@ -396,7 +398,12 @@ function sendUsageMessage(username) {
   msgs.push('> When you enter a PR url like:');
   msgs.push('>    Waiting for https://github.com/doc/flux-capacitor/pull/4 to get merged');
   msgs.push('> Status Bot will automatically linkify and replace the url with a cleaner message:');
-  msgs.push('>    Waiting for <https://github.com/doc/flux-capacitor/pull/4|PR #4 for doc/flux-capacitor>');
+  msgs.push('>    Waiting for <https://github.com/doc/flux-capacitor/pull/4|:arrow_heading_up: PR #4 for doc/flux-capacitor>');
+  msgs.push('Code Review links');
+  msgs.push('> When you enter a CR url like:');
+  msgs.push('>    Waiting for https://github.com/doc/flux-capacitor/compare/master...marty:hoverboard to get merged');
+  msgs.push('> Status Bot will automatically linkify and replace the url with a cleaner message:');
+  msgs.push('>    Waiting for <https://github.com/doc/flux-capacitor/compare/master...marty:hoverboard|:mag_right: CR doc/flux-capacitor:master...marty:delorean>');
 
   sendSimpleMessage(username, msgs.join('\n'));
 }
@@ -613,13 +620,18 @@ function processNowForCheckins() {
       .add(schedule.minute, 'minute')
       ;
 
-    debug(`Checkin time for ${config.id}`, checkinTime.format());
+    const isGoTime = now.minute() === checkinTime.minute() && now.hour() === checkinTime.hour();
 
-    if (now.minute() !== checkinTime.minute() || now.hour() !== checkinTime.hour()) {
-      return; // Not this minute and/or hour;
+    debugTicToc(`Checkin time for ${config.id}`, checkinTime.format() + ' ' + JSON.stringify({
+      schedule: schedule,
+      isGoTime: isGoTime
+    }));
+
+    if (!isGoTime) {
+      return;
     }
 
-    config.members.forEach(member => startStatusConversation(member.username, config.id)); // DM each team member
+    startStatusConversation(config);
   });
 }
 

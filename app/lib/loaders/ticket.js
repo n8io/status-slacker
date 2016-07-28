@@ -7,35 +7,38 @@ ticketLoader.load = (msg, urlBase = process.env.ISSUE_BASE_URL) => {
   const rDelim = '1511484d-b642-45da-b3b1-4a96fe675943'; // guid for sake of randomness
   let output = `${msg}`; // eslint-disable-line
 
-  const ticketReg = /([A-Z][A-Z][A-Z]*-[1-9][\d]*)+/ig;
+  const ticketReg = /(^([A-Z][A-Z][A-Z]*-[1-9][\d]*)|[\s]([A-Z][A-Z][A-Z]*-[1-9][\d]*)+\s?)/igm;
   const matches = output.match(ticketReg) || [];
 
   const uniqueMatches = [];
 
   matches.forEach(m => {
-    if (uniqueMatches.indexOf(m) !== -1) {
+    const trimmedKey = m.trim();
+
+    if (uniqueMatches.indexOf(trimmedKey) !== -1) {
       return;
     }
 
-    uniqueMatches.push(m);
+    uniqueMatches.push(trimmedKey);
   });
 
   uniqueMatches.sort((a, b) => b.length - a.length);
 
   debug(JSON.stringify({
     uniqueMatches: uniqueMatches
-  }, null, 2));
+  }));
 
   uniqueMatches.forEach((key, i) => {
-    const reg = new RegExp(key, 'ig');
-
-    output = output.replace(reg, `${lDelim}${i}${rDelim}`);
+    while (output.indexOf(key) > -1) {
+      output = output.replace(key, `${lDelim}${i}${rDelim}`);
+    }
   });
 
   uniqueMatches.forEach((key, i) => {
+    const trimmedKey = key.trim();
     const reg = new RegExp(`${lDelim}${i}${rDelim}`, 'ig');
 
-    output = output.replace(reg, `<${urlBase}${key}|${key}>`);
+    output = output.replace(reg, `<${urlBase}${trimmedKey}|${key}>`);
   });
 
   debug(JSON.stringify({
