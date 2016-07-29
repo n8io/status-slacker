@@ -296,15 +296,14 @@ function processNowForCheckins() {
 
 function buildQuestions(config, username, bot) {
   const questions = config.questions.map((question, questionIndex) => (response, convo) => {
-    if (questionIndex === 0) { // Only wire up the end event once
-      wireUpConvoEndHandler(username, convo, config);
-    }
+    wireUpConvoEndHandler(username, convo, config);
 
     debugReceiveResponse(JSON.stringify(response));
 
     convo.ask(slackifier.slackifyMessage(question, '_'), (response, convo) => {
       switch (response.text) {
         case COMMANDS.start.text:
+          convo.isRestarted = true;
           convo.stop();
           convo.next();
           bot.startConversation(response, questions[0]);
@@ -394,7 +393,12 @@ function wireUpConvoEndHandler(username, convo, config) {
         sendSimpleMessage(username, MESSAGES.confirmation.replace(/\$\{channels\}/ig, `${channels}`));
         break;
       case 'stopped':
-        sendStoppedMessage(username);
+        if (convo.isRestarted) {
+          sendRestartMessage(username);
+        }
+        else {
+          sendStoppedMessage(username);
+        }
         break;
       case 'timeout':
         sendSimpleMessage(username, MESSAGES.timeout);
@@ -445,6 +449,11 @@ function sendUsageMessage(username) {
 function sendStoppedMessage(username) {
   debugStopMessage(JSON.stringify(username));
   sendSimpleMessage(username, MESSAGES.stop);
+}
+
+function sendRestartMessage(username) {
+  debugStopMessage(JSON.stringify(username));
+  sendSimpleMessage(username, MESSAGES.restart);
 }
 
 function sendQuestionsMessages(username, configId) {
