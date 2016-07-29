@@ -1,8 +1,8 @@
 {
   "name": "status-slacker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
-  "main": "botkit.js",
+  "main": "bot.js",
   "scripts": {
     "build": "node docker",
     "clean": "rm -rf node_modules/ build/ docker-compose.yaml",

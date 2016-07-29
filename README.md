@@ -34,7 +34,7 @@ To view debug messages:
 
 ## TODOs
 1. ~~Enable the same user to be on multiple teams. Currently a single user can only belong to a single team status configuration.~~
-2. Break bot code into a more maintainable project structure
+2. ~~Break bot code into a more maintainable project structure~~
 3. Flesh out front end for configuration management
   1. Add in global holiday calendar
   2. Add in user holiday calendar
