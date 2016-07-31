@@ -1,29 +1,57 @@
 [
   {
-    "id": "< Identifier for configuration. E.g., Team Falcon, Team Nighthawk, Marketing >",
+    "id": "Identifier for configuration",
+    "id": "Team Nighthawk",
+    "channels": "The channel to report summaries, sans the leading '#'",
     "channels": [
-      "< channel to report summaries, sans the leading '#'. E.g. team-channel-name >"
+      "team-nighthawk"
     ],
-    "tz": "< Timezone for notification date/times. See http://momentjs.com/timezone for more details. E.g. America/New_York >",
+    "tz": "Timezone for notification date/times. See http://momentjs.com/timezone for more details.",
+    "tz": "America/New_York",
+    "schedules": "The day and times you want your team members to be notified each week",
     "schedules": [
       {
         "day": "Must be a number representing the day of week. E.g. 0 (Sunday) or 6 (Saturday)",
+        "day": 1,
         "hour": "Must be a number representing the hour of the day. Military time. 0-23",
-        "minute": "Must be a number representing the minute of the hour. 0-59"
+        "hour": 9,
+        "minute": "Must be a number representing the minute of the hour. 0-59",
+        "minute": 0
       }
     ],
-    "questions": [
-      "< What did you get work on... ? Note order is preserved >"
+    "doNotDisturbDates": "The list of dates that you do not want your team to be notified. Note this overrides the schedules above.",
+    "doNotDisturbDates": [
+      {
+        "date": "1900-01-01T00:00:00+00:00",
+        "name": "Founder's Day"
+      }
     ],
+    "doNotDisturbOverrideDates": "Your team is working on a federal holiday and still want them to report status",
+    "doNotDisturbOverrideDates": [
+      {
+        "date": "1900-01-01T00:00:00+00:00",
+        "name": "Martin Luther King Jr.'s Birthday"
+      }
+    ],
+    "questions": "The set of questions that your team members will be asked. Note order is preserved",
+    "questions": [
+      "What did you work on yesterday?",
+      "What are you planning on working on today?",
+      "What are your impediments?"
+    ],
+    "admins": "Admin members can see configs",
     "admins": [
       {
-        "username": "< Slack username sans '@'. E.g. nate.clark >"
+        "username": "Their Slack username sans '@'",
+        "username": "nate.clark"
       }
     ],
     "members": [
       {
-        "username": "< Slack username sans '@'. E.g. nate.clark >",
-        "color": "A hexidecimal color that will identify each user's summary in the channel. E.g. #00FF00"
+        "username": "Their Slack username sans '@'",
+        "username": "nate.clark",
+        "color": "A hexidecimal color that will identify each user's summary in the channel. Defaults to #FF530D if unset",
+        "color": "#00FF00"
       }
     ]
   }

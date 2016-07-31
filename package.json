@@ -15,6 +15,10 @@
   "keywords": [],
   "author": "Nate Clark",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/n8io/status-slacker"
+  },
   "dependencies": {
     "bluebird": "^3.4.1",
     "body-parser": "^1",

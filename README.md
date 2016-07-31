@@ -19,14 +19,18 @@ A single company, multiple team status bot for Slack.
 * NodeJs v6+
 
 ## Getting started
-1. `cat .env.sample > .env && cat data/configs.sample.json > data/configs.json`
-2. Fill out the appropriate values in `.env`
-3. Fill out the appropriate values in `data/configs.json`
-4. `npm install`
-5. `npm start`
-6. Open Slack and start a DM with your bot.
-7. Type `:-help`
-8. Profit!
+1. Copy example files:
+  1. `cat .env.sample > .env`
+  1. `cat data/configs.sample.json > data/configs.json`
+  1. `cat data/holidays.sample.json > data/holidays.json`
+1. Fill out the appropriate values in `.env`
+1. Fill out the appropriate values in `data/configs.json`
+1. Add/remove dates in `data/holidays.json` to prevent status messages from being sent on certain days
+1. `npm install`
+1. `npm start`
+1. Open Slack and start a DM with your bot.
+1. Type `:-help`
+1. Profit!
 
 ## Troubleshooting
 To view debug messages:
@@ -34,12 +38,12 @@ To view debug messages:
 
 ## TODOs
 1. ~~Enable the same user to be on multiple teams. Currently a single user can only belong to a single team status configuration.~~
-2. ~~Break bot code into a more maintainable project structure~~
-3. Flesh out front end for configuration management
+1. ~~Break bot code into a more maintainable project structure~~
+1. Flesh out front end for configuration management
   1. Add in global holiday calendar
-  2. Add in user holiday calendar
+  1. Add in user holiday calendar
     1. Allow users to declare themselves on holiday via `:-holiday` command
-    2. Allow users to undeclare themselves on holiday via `:-unholiday` command
-4. Create a public docker image
-5. ~~Implement custom team name per configuration~~
-6. Implement custom icon url per configuration
+    1. Allow users to undeclare themselves on holiday via `:-unholiday` command
+1. Create a public docker image
+1. ~~Implement custom team name per configuration~~
+1. Implement custom icon url per configuration

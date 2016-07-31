@@ -248,22 +248,30 @@ function regWrapCmd(cmd) {
   return new RegExp(`^${cmd}$`, 'ig');
 }
 
-function startTicking() {
-  if (ticTock) {
-    clearInterval(ticTock);
+function startTicking(interval) {
+  clearInterval(ticTock);
+
+  if (interval) {
+    ticTock = setInterval(processNowForCheckins, TIC_INTERVAL);
   }
   else {
     // First run
-    processNowForCheckins();
-  }
+    const startInSeconds = 60 - moment().second();
 
-  ticTock = setInterval(processNowForCheckins, TIC_INTERVAL);
+    debugTicToc(debugTicToc.c.cyan(`Schedule processing will start at the top of the minute (${startInSeconds}sec)`));
+
+    setTimeout(() => {
+      debugTicToc(debugTicToc.c.cyan('Schedule processing started'));
+      processNowForCheckins();
+      startTicking(TIC_INTERVAL);
+    }, process.env.FORCE_START ? 0 : startInSeconds * 1000);
+  }
 }
 
 function processNowForCheckins() {
   const now = moment().tz('America/New_York');
 
-  debugTicToc(`Server time ${now.format()}`);
+  // debugTicToc(`Server time ${now.format()}`);
 
   userMgmt.getConfigs().forEach(config => {
     const schedule = config.schedules.find(s => s.day === now.day());
@@ -279,7 +287,14 @@ function processNowForCheckins() {
       .add(schedule.minute, 'minute')
       ;
 
-    const isGoTime = now.minute() === checkinTime.minute() && now.hour() === checkinTime.hour();
+    const todaysDoNotDisturbDate = userMgmt.getTodaysDoNotDisturbDate(config);
+    const isGoTime = now.minute() === checkinTime.minute() && now.hour() === checkinTime.hour() && !todaysDoNotDisturbDate;
+
+    if (todaysDoNotDisturbDate) {
+      debugTicToc(debugTicToc.c.yellow(`Today is ${todaysDoNotDisturbDate.name}. No status messages today for ${config.id}.`));
+
+      return;
+    }
 
     debugTicToc(`Checkin time for ${config.id} ${checkinTime.format()}`, JSON.stringify({
       schedule: schedule,
@@ -501,8 +516,9 @@ function sendSignUpMessage(username) {
 
 function sendConfigMessage(username, config) {
   const title = `${_.snakeCase(config.id).replace(/[_]/ig, '-')}.json`;
+  const redactedConfig = userMgmt.redactConfig(config);
 
-  sendSnippet(username, title, JSON.stringify(config, null, 2), 'javascript');
+  sendSnippet(username, title, JSON.stringify(redactedConfig, null, 2), 'javascript');
 }
 
 function sendUserSettings(username) {
