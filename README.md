@@ -2,6 +2,18 @@
 # status-slacker
 A single company, multiple team status bot for Slack.
 
+## Features
+* This bot direct messages each team member on a configurable schedule
+* Conversation questions are fully customizable
+* Pull request, code review, and ticket urls are automatically parsed and linkified with cleaner text
+* Schedule timezone is configurable per team configuration
+* Admin users can view team configurations without leaving Slack
+* Supports multi-team users
+* Supports multiple channel summary posting per team
+* Supports both global and team level "Do Not Disturb" dates
+* Status summaries can be set to a unique color per user
+* It's free
+
 ## How it works
 
 1. Using a Slack bot, it will send out a direct message to each member of the team on a set schedule.
@@ -40,10 +52,11 @@ To view debug messages:
 1. ~~Enable the same user to be on multiple teams. Currently a single user can only belong to a single team status configuration.~~
 1. ~~Break bot code into a more maintainable project structure~~
 1. Flesh out front end for configuration management
-  1. Add in global holiday calendar
+  1. ~~Add in global holiday calendar~~
   1. Add in user holiday calendar
     1. Allow users to declare themselves on holiday via `:-holiday` command
     1. Allow users to undeclare themselves on holiday via `:-unholiday` command
 1. Create a public docker image
 1. ~~Implement custom team name per configuration~~
 1. Implement custom icon url per configuration
+1. TESTS
