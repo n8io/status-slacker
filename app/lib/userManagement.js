@@ -1,13 +1,16 @@
 const store = {};
 const cwd = require('cwd');
 const _ = require('lodash');
+const moment = require('moment-timezone');
 
 module.exports = {
   init: init,
   getSlackUser: getSlackUser,
   getConfiguredUsers: getConfiguredUsers,
   getUserConfigs: getUserConfigs,
-  getConfigs: getConfigs
+  getConfigs: getConfigs,
+  redactConfig: redactConfig,
+  getTodaysDoNotDisturbDate: getTodaysDoNotDisturbDate
 };
 
 function init(team, users) {
@@ -56,5 +59,72 @@ function getConfigs() {
 
   delete require.cache[require.resolve(configsFile)]; // Kill it in cache so we pickup changes made since this process started
 
-  return require(configsFile);
+  return require(configsFile)
+    .map(config => {
+      config._doNotDisturbDates = mergeDoNotDisturbDates(config.doNotDisturbDates, config.doNotDisturbOverrideDates);
+      config.isADoNotDisturbDay = getTodaysDoNotDisturbDate(config) || false;
+
+      return config;
+    });
+}
+
+function redactConfig(config) {
+  return Object.assign({}, _.omit(config, [
+    '_doNotDisturbDates'
+  ]));
+}
+
+function getGlobalDoNotDisturbDates() {
+  const holidaysFile = cwd('data/holidays.json');
+
+  delete require.cache[require.resolve(holidaysFile)]; // Kill it in cache so we pickup changes made since this process started
+
+  return normalizeDoNotDisturbDates(require(holidaysFile));
+}
+
+function normalizeDoNotDisturbDates(doNotDisturbDates) {
+  return (doNotDisturbDates || [])
+    .filter(dnd => moment(dnd.date).isValid(dnd))
+    .map(dnd => {
+      const dndDate = moment(dnd.date);
+
+      if (!dndDate.isValid()) {
+        dnd.date = moment('1900-01-01T00:00:00Z').utc().format(); // Set to a past date
+      }
+      else {
+        dnd.date = dndDate.utc().startOf('day').format();
+      }
+
+      return dnd;
+    });
+}
+
+function mergeDoNotDisturbDates(doNotDisturbDates, overrides) {
+  const normalizedPrimeDoNotDisturbDates = normalizeDoNotDisturbDates(doNotDisturbDates);
+  const normalizedOverrides = normalizeDoNotDisturbDates(overrides);
+  const globalDoNotDisturbDates = getGlobalDoNotDisturbDates() || [];
+  const concattedDoNotDisturbDates = globalDoNotDisturbDates.concat(normalizedPrimeDoNotDisturbDates);
+
+  if (!concattedDoNotDisturbDates.length) {
+    return [];
+  }
+
+  const concattedMap = _.groupBy(concattedDoNotDisturbDates, 'date');
+  const mergedDoNotDisturbDates = _.keys(concattedMap)
+    .map(key => concattedMap[key][concattedMap[key].length - 1])
+    ;
+
+  const overrideMap = _.groupBy(normalizedOverrides);
+
+  return _.chain(mergedDoNotDisturbDates)
+    .filter(dnd => !overrideMap[dnd.date]) // Filter out those dates that we want to treat as a normal day
+    .sortBy(mergedDoNotDisturbDates, 'date')
+    .value()
+    ;
+}
+
+function getTodaysDoNotDisturbDate(config) {
+  const key = moment().utc().startOf('day').format();
+
+  return (config._doNotDisturbDates || []).find(dnd => dnd.date === key);
 }

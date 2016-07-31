@@ -13,6 +13,6 @@ require('dotenv-safe').load({
 dispatcher
   .init()
   .then(() => {
-    console.log(debugBot.c.green('All Slack RTM bots are now running.'));
+    // console.log(debugBot.c.green('All Slack RTM bots are now running.'));
   })
   ;
