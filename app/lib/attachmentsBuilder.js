@@ -1,6 +1,6 @@
 const cwd = require('cwd');
 const color = require('tinycolor2');
-const debug = require(cwd('app/lib/appDebug'))('app:lib:attachmentsBuilder');
+const debug = require(cwd('app/lib/appDebug'))('app:lib:attachments-builder');
 
 const messageBuilder = require(cwd('app/lib/messageBuilder'));
 
@@ -49,7 +49,7 @@ function buildQuestionsColorScheme(user, responses) {
   });
 }
 
-function getColorScheme(baseColor = process.env.ANSWER_FALLBACK_HEX_COLOR || color.random().toHexString(), responses) {
+function getColorScheme(baseColor = process.env.FALLBACK_ANSWER_HEX_COLOR || color.random().toHexString(), responses) {
   let responsesLen = 0;
 
   responses.forEach(() => responsesLen++); // No idea why I can't just use Array.length here
