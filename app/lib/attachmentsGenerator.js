@@ -1,7 +1,7 @@
 const cwd = require('cwd');
 const color = require('tinycolor2');
 const chance = require('chance').Chance();
-const debug = require(cwd('app/lib/appDebug'))('app:lib:attachmentsGenerator');
+const debug = require(cwd('app/lib/appDebug'))('app:lib:attachments-generator');
 
 const msgGen = require(cwd('app/lib/messageGenerator'));
 

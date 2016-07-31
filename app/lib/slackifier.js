@@ -1,4 +1,7 @@
 function slackifyMessage(origMessage, wrapChar = '', attachments = [], overrides = {}) {
+  const iconUrl = overrides.icon_url || process.env.SLACK_BOT_ICON_URL || null; // eslint-disable-line camelcase
+  const username = process.env.SLACK_BOT_NAME;
+
   const message = {
     /* eslint-disable camelcase */
     mrkdwn: overrides.mrkdown || true,
@@ -9,12 +12,12 @@ function slackifyMessage(origMessage, wrapChar = '', attachments = [], overrides
     /* eslint-enable camelcase */
   };
 
-  if (process.env.SLACK_BOT_NAME) {
-    message.username = process.env.SLACK_BOT_NAME;
+  if (username) {
+    message.username = username;
   }
 
-  if (process.env.SLACK_BOT_ICON_URL) {
-    message.icon_url = process.env.SLACK_BOT_ICON_URL; // eslint-disable-line camelcase
+  if (iconUrl) {
+    message.icon_url = iconUrl; // eslint-disable-line camelcase
   }
 
   return message;

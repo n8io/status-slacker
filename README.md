@@ -1,6 +1,7 @@
-![Slackbot exterminate!](https://a.slack-edge.com/2fac/plugins/bot/assets/service_128.png)
 # status-slacker
 A single company, multiple team status bot for Slack.
+
+![Workflow](https://dl.dropboxusercontent.com/u/452959/hosted/status-slacker/workflow.gif)
 
 ## Features
 * This bot direct messages each team member on a configurable schedule
@@ -10,7 +11,7 @@ A single company, multiple team status bot for Slack.
 * Admin users can view team configurations without leaving Slack
 * Supports multi-team users
 * Supports multiple channel summary posting per team
-* Supports both global and team level "Do Not Disturb" dates
+* Supports both global and team level ["Do Not Disturb" dates](#do-not-disturb-dates)
 * Status summaries can be set to a unique color per user
 * It's free
 
@@ -20,13 +21,27 @@ A single company, multiple team status bot for Slack.
 2. The user will then converse with the bot to collect answers to the configured questions.
 3. Upon completion, a status summary for said user will be posted on the configured channels.
 
-![Workflow](https://dl.dropboxusercontent.com/u/452959/hosted/status-slacker/workflow.gif)
-
 ## Slack commands
 ![Help](https://dl.dropboxusercontent.com/u/452959/hosted/status-slacker/usage.png)
 
+## Do Not Disturb dates
+Do Not Disturb dates are dates that you **don't want** the bot to automatically send status requests.
+
+The table below answers "Is today a..."
+
+|Team DND date?|Global DND date?|Team DND Override?|Should bot send status messages?|
+|:---:|:---:|:---:|:---:|
+|X|X|X|Yes|
+|X||X|Yes|
+||X|X|Yes|
+|||X|Yes|
+||||Yes|
+|X|||No|
+|X|X||No|
+||X||No|
+
 ## Requirements
-* A SlackBot token [more info here](https://api.slack.com/bot-users)
+* A new Slack Bot and token [more info here](https://api.slack.com/bot-users)
 * A server to host
 * NodeJs v6+
 
@@ -37,7 +52,7 @@ A single company, multiple team status bot for Slack.
   1. `cat data/holidays.sample.json > data/holidays.json`
 1. Fill out the appropriate values in `.env`
 1. Fill out the appropriate values in `data/configs.json`
-1. Add/remove dates in `data/holidays.json` to prevent status messages from being sent on certain days
+1. Add/remove dates in `data/holidays.json` to prevent scheduled status requests from being sent on certain dates
 1. `npm install`
 1. `npm start`
 1. Open Slack and start a DM with your bot.

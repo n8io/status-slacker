@@ -2,7 +2,7 @@ const cwd = require('cwd');
 const debug = require(cwd('app/lib/appDebug'))('app:lib:loaders:ticket');
 const ticketLoader =  () => {};
 
-ticketLoader.load = (msg, urlBase = process.env.ISSUE_BASE_URL) => {
+ticketLoader.load = (msg, urlBase = process.env.FALLBACK_ISSUE_BASE_URL) => {
   const lDelim = '9a567ca4-05db-4754-8792-ff53a8c2cc54'; // guid for sake of randomness
   const rDelim = '1511484d-b642-45da-b3b1-4a96fe675943'; // guid for sake of randomness
   let output = `${msg}`; // eslint-disable-line

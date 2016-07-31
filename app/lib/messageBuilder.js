@@ -1,5 +1,5 @@
 const cwd = require('cwd');
-const debug = require(cwd('app/lib/appDebug'))('app:lib:messageBuilder');
+const debug = require(cwd('app/lib/appDebug'))('app:lib:message-builder');
 const loaders = [
   require(cwd('app/lib/loaders/ticket')),
   require(cwd('app/lib/loaders/codeReview')),
