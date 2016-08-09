@@ -239,9 +239,10 @@ function startStatusConversation(config) {
     return; // No configured users, nothing to do
   }
 
-  config.members.forEach(member => {
-    sendStatusIntroMessage(member.username, config);
-  });
+  config
+    .members
+    .filter(member => !member.disableReminderMessage)
+    .forEach(member => sendStatusIntroMessage(member.username, config));
 }
 
 function regWrapCmd(cmd) {
@@ -256,7 +257,7 @@ function startTicking(interval) {
   }
   else {
     // First run
-    const startInSeconds = 60 - moment().second();
+    const startInSeconds = 60 - moment().second() + 1; // Start 1 sec into the top of the minute
 
     debugTicToc(debugTicToc.c.cyan(`Schedule processing will start at the top of the minute (${startInSeconds}sec)`));
 
@@ -548,12 +549,12 @@ function sendUserSettings(username) {
   function buildUserSettingsAttacment(config, member) {
     let msg = _.keys(member)
       .filter(key => key !== 'username')
-      .map(key => `${_.capitalize(key)}: ${member[key]}`)
-      .join('\n') || `Color: ${process.env.ANSWER_FALLBACK_HEX_COLOR} (default)`
+      .map(key => `${key}: ${member[key]}`)
+      .join('\n') || `color: ${process.env.ANSWER_FALLBACK_HEX_COLOR} (default)`
       ;
 
     if ((config.admins || []).find(a => a.username === member.username)) {
-      msg = `Admin: true\n${msg}`;
+      msg = `isAdmin: true\n${msg}`;
     }
 
     const attachment = {
