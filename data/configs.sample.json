@@ -51,7 +51,9 @@
         "username": "Their Slack username sans '@'",
         "username": "nate.clark",
         "color": "A hexidecimal color that will identify each user's summary in the channel. Defaults to #FF530D if unset",
-        "color": "#00FF00"
+        "color": "#00FF00",
+        "disableReminderMessage": "Disables status nag message per user. Defaults to false",
+        "disableReminderMessage": false
       }
     ]
   }

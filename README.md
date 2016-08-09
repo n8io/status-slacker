@@ -4,7 +4,7 @@ A single company, multiple team status bot for Slack.
 ![Workflow](https://dl.dropboxusercontent.com/u/452959/hosted/status-slacker/workflow.gif)
 
 ## Features
-* This bot direct messages each team member on a configurable schedule
+* This bot direct messages each team member on a configurable schedule (can be disabled per user)
 * Conversation questions are fully customizable
 * Pull request, code review, and ticket urls are automatically parsed and linkified with cleaner text
 * Schedule timezone is configurable per team configuration
