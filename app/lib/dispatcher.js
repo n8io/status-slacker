@@ -456,7 +456,7 @@ function sendUsageMessage(username) {
   msgs.push('> When you enter a CR url like:');
   msgs.push('>    Waiting for https://github.com/doc/flux-capacitor/compare/master...marty:hoverboard to get merged');
   msgs.push('> Status Bot will automatically linkify and replace the url with a cleaner message:');
-  msgs.push('>    Waiting for <https://github.com/doc/flux-capacitor/compare/master...marty:hoverboard|:mag_right: CR doc/flux-capacitor:master...marty:delorean>');
+  msgs.push('>    Waiting for <https://github.com/doc/flux-capacitor/compare/master...marty:hoverboard|:mag_right: CR doc/flux-capacitor:master...marty:delorean> to get merged');
 
   sendSimpleMessage(username, msgs.join('\n'));
 }
