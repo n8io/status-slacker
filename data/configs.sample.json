@@ -39,6 +39,15 @@
       "What are you planning on working on today?",
       "What are your impediments?"
     ],
+    "customConfirmationMessage": "Once a team member finishes submitting responses, optionally insert a custom message",
+    "customConfirmationMessage": {
+      "disabled": "Whether or not to turn it off, defaults to false",
+      "disabled": false,
+      "isReplacement": "Whether or not to replace the standard confirmation message. Defaults to false (meaning prepend the custom message to the standard message)",
+      "isReplacement": false,
+      "text": "The message text to post",
+      "text": "Don't forget to enter your :timer_clock: against tickets. This should be done daily.\n"
+    },
     "admins": "Admin members can see configs",
     "admins": [
       {
