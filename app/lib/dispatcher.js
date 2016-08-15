@@ -406,7 +406,20 @@ function wireUpConvoEndHandler(username, convo, config) {
           channels = `#${config.channels[0]} channel`;
         }
 
-        sendSimpleMessage(username, MESSAGES.confirmation.replace(/\$\{channels\}/ig, `${channels}`));
+        let message = MESSAGES.confirmation;
+
+        if (!_.get(config, 'customConfirmationMessage.disabled', false) && _.get(config, 'customConfirmationMessage.text')) {
+          if (config.customConfirmationMessage.isReplacement) {
+            message = config.customConfirmationMessage.text;
+          }
+          else {
+            message = `${_.get(config, 'customConfirmationMessage.text')}\n${message}`;
+          }
+        }
+
+        message = message.replace(/\$\{channels\}/ig, `${channels}`);
+
+        sendSimpleMessage(username, message);
         break;
       case 'stopped':
         if (convo.isRestarted) {
