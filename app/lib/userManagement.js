@@ -64,13 +64,38 @@ function getConfigs() {
       config._doNotDisturbDates = mergeDoNotDisturbDates(config.doNotDisturbDates, config.doNotDisturbOverrideDates);
       config.isADoNotDisturbDay = getTodaysDoNotDisturbDate(config) || false;
 
+      config._questions = config.questions;
+      config.questions = normalizeQuestions(config.questions);
+
       return config;
     });
 }
 
+function normalizeQuestions(questions) {
+  return [].concat(questions.map(question => {
+    let q = {text: ''};
+
+    if (_.isObject(question) && !_.isUndefined(questions)) {
+      q = _.pick(question, [
+        'text'
+      ]);
+    }
+    else if (_.isString(q)) {
+      q.text = q;
+    }
+
+    return q;
+  }));
+}
+
 function redactConfig(config) {
-  return Object.assign({}, _.omit(config, [
-    '_doNotDisturbDates'
+  const cfg = Object.assign({}, config);
+
+  cfg.questions = cfg._questions;
+
+  return Object.assign({}, _.omit(cfg, [
+    '_doNotDisturbDates',
+    '_questions'
   ]));
 }
 
