@@ -65,27 +65,56 @@ function getConfigs() {
       config.isADoNotDisturbDay = getTodaysDoNotDisturbDate(config) || false;
 
       config._questions = config.questions;
-      config.questions = normalizeQuestions(config.questions);
+      config.questions = normalizeQuestions(config.questions, config.schedules);
 
       return config;
     });
 }
 
-function normalizeQuestions(questions) {
-  return [].concat(questions.map(question => {
-    let q = {text: ''};
+function normalizeQuestions(questions, schedules) {
+  const mergedQuestions = [].concat(questions.map(question => {
+    let q = {
+      key: (new Date()).getTime().toString(),
+      text: ''
+    };
 
-    if (_.isObject(question) && !_.isUndefined(questions)) {
+    if (_.isObject(question)) {
       q = _.pick(question, [
+        'key',
         'text'
       ]);
     }
-    else if (_.isString(q)) {
-      q.text = q;
+    else if (_.isString(question)) {
+      q.key = _.kebabCase(question);
+      q.text = question;
     }
 
     return q;
   }));
+
+  const day = (new Date()).getDay();
+
+  return mergedQuestions.map(question => {
+    const scheduleIndex = _.findLastIndex(schedules, schedule => schedule.day === day);
+
+    if (scheduleIndex === -1) {
+      return question;
+    }
+
+    const schedule = schedules[scheduleIndex];
+
+    if (!schedule.questions) {
+      return question;
+    }
+
+    const overrideQuestion = _.find(schedule.questions, {key: question.key});
+
+    if (overrideQuestion) {
+      question.text = overrideQuestion.text;
+    }
+
+    return question;
+  });
 }
 
 function redactConfig(config) {
@@ -94,6 +123,7 @@ function redactConfig(config) {
   cfg.questions = cfg._questions;
 
   return Object.assign({}, _.omit(cfg, [
+    'isADoNotDisturbDay',
     '_doNotDisturbDates',
     '_questions'
   ]));
