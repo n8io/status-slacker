@@ -16,10 +16,19 @@
         "hour": "Must be a number representing the hour of the day. Military time. 0-23",
         "hour": 9,
         "minute": "Must be a number representing the minute of the hour. 0-59",
-        "minute": 0
+        "minute": 0,
+        "questions": "Optional override array for changing questions on a per schedule basis",
+        "questions": [
+          {
+            "key": "String that matches the question you wish to override/replace",
+            "key": "yesterday",
+            "text": "Text that will override the question of the same key",
+            "text": "What did you work on the last business day?"
+          }
+        ]
       }
     ],
-    "doNotDisturbDates": "The list of dates that you do not want your team to be notified. Note this overrides the schedules above.",
+    "doNotDisturbDates": "The list of dates that you do not want your team to be notified. Note this overrides the schedules above",
     "doNotDisturbDates": [
       {
         "date": "1900-01-01T00:00:00+00:00",
@@ -36,12 +45,17 @@
     "questions": "The set of questions that your team members will be asked. Note order is preserved",
     "questions": [
       {
+        "key": "A unique string that is leveraged when overriding questions on a certain schedule",
+        "key": "yesterday",
+        "text": "The string that a team member will be prompted with during the status conversation",
         "text": "What did you work on yesterday?"
       },
       {
+        "key": "today",
         "text": "What are you planning on working on today?"
       },
       {
+        "key": "impediments",
         "text": "What are your impediments?"
       }
     ],
