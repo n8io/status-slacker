@@ -35,9 +35,15 @@
     ],
     "questions": "The set of questions that your team members will be asked. Note order is preserved",
     "questions": [
-      "What did you work on yesterday?",
-      "What are you planning on working on today?",
-      "What are your impediments?"
+      {
+        "text": "What did you work on yesterday?"
+      },
+      {
+        "text": "What are you planning on working on today?"
+      },
+      {
+        "text": "What are your impediments?"
+      }
     ],
     "customConfirmationMessage": "Once a team member finishes submitting responses, optionally insert a custom message",
     "customConfirmationMessage": {

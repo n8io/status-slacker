@@ -316,7 +316,7 @@ function buildQuestions(config, username, bot) {
 
     debugReceiveResponse(JSON.stringify(response));
 
-    convo.ask(slackifier.slackifyMessage(question, '_'), (response, convo) => {
+    convo.ask(slackifier.slackifyMessage(question.text, '_'), (response, convo) => {
       switch (response.text) {
         case COMMANDS.start.text:
           convo.isRestarted = true;
@@ -495,7 +495,7 @@ function sendQuestionsMessages(username, configId) {
   }
 
   configs.forEach(config => {
-    const questionsMessages = config.questions.map((question, index) => `\n>${index + 1}) _${question}_`).join('');
+    const questionsMessages = config.questions.map((question, index) => `\n>${index + 1}) _${question.text}_`).join('');
     const message = `Here are the questions you will be asked for *${config.id}*:${questionsMessages}`;
 
     debugQuestionsMessages(JSON.stringify({
