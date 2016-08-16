@@ -3,7 +3,8 @@ const debug = require(cwd('app/lib/appDebug'))('app:lib:message-builder');
 const loaders = [
   require(cwd('app/lib/loaders/ticket')),
   require(cwd('app/lib/loaders/codeReview')),
-  require(cwd('app/lib/loaders/pullRequest'))
+  require(cwd('app/lib/loaders/pullRequest')),
+  require(cwd('app/lib/loaders/trimStart'))
 ];
 
 const messageBuilder = () => {};
