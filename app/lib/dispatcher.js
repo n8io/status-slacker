@@ -508,13 +508,14 @@ function sendQuestionsMessages(username, configId) {
 }
 
 function sendStatusSummary(statusSummary, config) {
+  const summary = attachmentsBuilder.build(statusSummary);
   const message = slackifier.slackifyMessage(
     MESSAGES.statusTitle
       .replace(/\$\{config\.id\}/ig, `${config.id}`)
       .replace(/\$\{statusSummary\.user\.profile\.real_name\}/ig, `${statusSummary.user.profile.real_name}`)
       .replace(/\$\{statusSummary\.user\.name\}/ig, `${statusSummary.user.name}`),
     '',
-    attachmentsBuilder.build(statusSummary)
+    summary.attachments
   );
 
   debugStatusSummary(JSON.stringify(statusSummary));

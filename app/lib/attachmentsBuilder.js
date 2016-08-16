@@ -6,24 +6,53 @@ const messageBuilder = require(cwd('app/lib/messageBuilder'));
 
 const attachmentsBuilder = () => {};
 
-attachmentsBuilder.build = buildAttachments;
+attachmentsBuilder.build = build;
 
 module.exports = attachmentsBuilder;
 
-function buildAttachments(status) {
-  const responses = buildQuestionsColorScheme(status.user, status.responses);
+function build(statusSummary) {
+  const responses = buildQuestionsColorScheme(statusSummary.user, statusSummary.responses);
+  const attachments = responses.filter(response => !isEmptyResponse(response.answer)).map(response => buildAttachment(response)); // eslint-disable-line prefer-const
+  const nonResponses = responses.filter(response => isEmptyResponse(response.answer)).map(response => response);
+  const output = [];
 
-  return responses.map(response => buildAttachment(response));
+  attachments.forEach(a => output.push(a));
+
+  const nonResponseMessage = buildNonResponseMessage(nonResponses);
+
+  if (nonResponseMessage) {
+    output.push(nonResponseMessage);
+  }
+
+  return {
+    attachments: output,
+    nonResponseSummary: buildNonResponseMessage(nonResponses)
+  };
+}
+
+function buildNonResponseMessage(nonResponses) {
+  const input = [];
+
+  nonResponses.forEach(nr => input.push(nr));
+
+  if (!input.length) {
+    return null;
+  }
+
+  return {
+    /* eslint-disable camelcase */
+    fallback: '',
+    color: '#FFFFFF',
+    mrkdwn_in: [
+      'text'
+    ],
+    text: `_...with no update provided for ${input.length} other question(s)_`
+    /* eslint-enable camelcase */
+  };
 }
 
 function buildAttachment(response) {
-  debug('buildAttachment', JSON.stringify({
-    inputs: {
-      response: response
-    }
-  }));
-
-  const attachment = {
+  return {
     /* eslint-disable camelcase */
     fallback: '',
     color: response.color,
@@ -35,8 +64,6 @@ function buildAttachment(response) {
     text: messageBuilder.build(response.answer)
     /* eslint-enable camelcase */
   };
-
-  return attachment;
 }
 
 function buildQuestionsColorScheme(user, responses) {
@@ -47,6 +74,36 @@ function buildQuestionsColorScheme(user, responses) {
 
     return response;
   });
+}
+
+function isEmptyResponse(text) {
+  let temp = (text || '').trim();
+
+  if (temp.split(' ').length > 1) {
+    return false;
+  }
+
+  temp = temp.toLowerCase();
+
+  switch (temp) {
+    case 'no':
+    case 'nope':
+    case 'none':
+    case 'nothing':
+    case 'nada':
+    case 'na':
+    case 'nah':
+    case '.':
+    case '..':
+    case '...':
+    case '-':
+    case '--':
+      return true;
+    default:
+      //
+  }
+
+  return false;
 }
 
 function getColorScheme(baseColor = process.env.FALLBACK_ANSWER_HEX_COLOR || color.random().toHexString(), responses) {
