@@ -29,6 +29,7 @@ let dumbBot = null;
 let ticTock = null;
 
 function init() {
+  clearInterval(ticTock);
   smartBot = Botkit.slackbot();
   dumbBot = new SlackBot({
     token: process.env.SLACK_BOT_TOKEN,
@@ -49,6 +50,14 @@ function init() {
         const users = payload.users.filter(u => !u.deleted && !!u.profile);
 
         userMgmt.init(team, users);
+
+        smartBot.on('rtm_close', () => {
+          const restartInXSecs = 30;
+
+          console.log(debugDispatcher.c.red(`RTM connection closed!!! Attempting to restart in ${restartInXSecs} seconds...`));
+
+          setTimeout(init, restartInXSecs * 1000);
+        });
 
         return resolve();
       })
