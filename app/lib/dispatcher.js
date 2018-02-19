@@ -15,14 +15,26 @@ const attachmentsBuilder = require(cwd('app/lib/attachmentsBuilder'));
 
 const debugDefaultPath = cwd('app/lib/appDebug');
 const debugDispatcher = require(debugDefaultPath)('dispatcher');
-const debugStopMessage = require(debugDefaultPath)('dispatcher:send:stopped-message');
+const debugStopMessage = require(debugDefaultPath)(
+  'dispatcher:send:stopped-message'
+);
 const debugSendSnippet = require(debugDefaultPath)('dispatcher:send:snippet');
-const debugQuestionsMessages = require(debugDefaultPath)('dispatcher:send:questions-message');
-const debugStatusSummary = require(debugDefaultPath)('dispatcher:send:status-summary');
-const debugUserSettings = require(debugDefaultPath)('dispatcher:send:user-settings');
-const debugReceiveResponse = require(debugDefaultPath)('dispatcher:receive:response');
+const debugQuestionsMessages = require(debugDefaultPath)(
+  'dispatcher:send:questions-message'
+);
+const debugStatusSummary = require(debugDefaultPath)(
+  'dispatcher:send:status-summary'
+);
+const debugUserSettings = require(debugDefaultPath)(
+  'dispatcher:send:user-settings'
+);
+const debugReceiveResponse = require(debugDefaultPath)(
+  'dispatcher:receive:response'
+);
 const debugTicToc = require(debugDefaultPath)('dispatcher:tic');
-const debugSimpleSend = require(debugDefaultPath)('dispatcher:send:simple-message');
+const debugSimpleSend = require(debugDefaultPath)(
+  'dispatcher:send:simple-message'
+);
 
 let smartBot = null;
 let dumbBot = null;
@@ -46,22 +58,31 @@ function init() {
           return reject(err);
         }
 
-        const team = payload.team;
-        const users = payload.users.filter(u => !u.deleted && !!u.profile);
+        bot.api.users.list({}, (err, res) => {
+          if (err) {
+            return reject(err);
+          }
 
-        userMgmt.init(team, users);
+          const team = payload.team;
+          const users = res.members;
 
-        smartBot.on('rtm_close', () => {
-          const restartInXSecs = 30;
+          userMgmt.init(team, users);
 
-          console.log(debugDispatcher.c.red(`RTM connection closed!!! Attempting to restart in ${restartInXSecs} seconds...`));
+          smartBot.on('rtm_close', () => {
+            const restartInXSecs = 30;
 
-          setTimeout(init, restartInXSecs * 1000);
+            console.log(
+              debugDispatcher.c.red(
+                `RTM connection closed!!! Attempting to restart in ${restartInXSecs} seconds...`
+              )
+            );
+
+            setTimeout(init, restartInXSecs * 1000);
+          });
+
+          return resolve();
         });
-
-        return resolve();
-      })
-      ;
+      });
   });
 
   const onSmartBotSocketOpen = new Bluebird(resolve => {
@@ -72,8 +93,7 @@ function init() {
     dumbBot.on('start', () => resolve());
   });
 
-  return Bluebird
-    .all([onSmartBotStart, onSmartBotSocketOpen, onDumbBotStart])
+  return Bluebird.all([onSmartBotStart, onSmartBotSocketOpen, onDumbBotStart])
     .then(() => {
       registerSmartBotListeners();
 
@@ -86,161 +106,207 @@ function init() {
     })
     .error(() => {
       console.log(debugDispatcher.c.red('Error'));
-    })
-    ;
+    });
 }
 
 function registerSmartBotListeners() {
-  smartBot.hears([regWrapCmd(COMMANDS.start.text)], ['direct_message'], (bot, userMsg) => {
-    const configs = userMgmt.getUserConfigs(userMsg.user);
+  smartBot.hears(
+    [regWrapCmd(COMMANDS.start.text)],
+    ['direct_message'],
+    (bot, userMsg) => {
+      const configs = userMgmt.getUserConfigs(userMsg.user);
 
-    if (!configs.length) {
-      // User is not in any config, requires setup
-      sendSignUpMessage(userMsg.user);
+      if (!configs.length) {
+        // User is not in any config, requires setup
+        sendSignUpMessage(userMsg.user);
 
-      return;
-    }
-    else if (configs.length > 1) {
-      const leadMsg = MESSAGES.whichTeam.replace(/\$\{configs\.length\}/, `${configs.length}`);
-      const configMsg = configs.map((config, index) => `${index + 1}) ${config.id}`).join('\n>');
-      let selectedConfigIndex = -1; // eslint-disable-line no-unused-vars
+        return;
+      }
+      else if (configs.length > 1) {
+        const leadMsg = MESSAGES.whichTeam.replace(
+          /\$\{configs\.length\}/,
+          `${configs.length}`
+        );
+        const configMsg = configs
+          .map((config, index) => `${index + 1}) ${config.id}`)
+          .join('\n>');
+        let selectedConfigIndex = -1; // eslint-disable-line no-unused-vars
 
-      bot.startConversation(userMsg, (err, convo) => {
-        const choices = configs.map((config, index) => { // eslint-disable-line arrow-body-style
-          return {
-            pattern: regWrapCmd(index + 1),
+        bot.startConversation(userMsg, (err, convo) => {
+          const choices = configs.map((config, index) =>
+            // eslint-disable-line arrow-body-style
+            ({
+              pattern: regWrapCmd(index + 1),
+              callback: (response, convo) => {
+                selectedConfigIndex = index;
+                convo.say(`*${configs[index].id}* status update started.`);
+                convo.next();
+              }
+            })
+          );
+
+          choices.push({
+            default: true,
             callback: (response, convo) => {
-              selectedConfigIndex = index;
-              convo.say(`*${configs[index].id}* status update started.`);
+              convo.repeat();
               convo.next();
             }
-          };
+          });
+
+          convo.ask(`${leadMsg}\n>${configMsg}`, choices);
+
+          convo.on('end', () => {
+            const questions = buildQuestions(
+              configs[selectedConfigIndex],
+              userMsg.user,
+              bot
+            );
+
+            bot.startConversation(userMsg, questions[0]);
+          });
         });
+      }
+      else {
+        const questions = buildQuestions(configs[0], userMsg.user, bot);
 
-        choices.push({
-          default: true,
-          callback: (response, convo) => {
-            convo.repeat();
-            convo.next();
-          }
-        });
-
-        convo.ask(`${leadMsg}\n>${configMsg}`, choices);
-
-        convo.on('end', () => {
-          const questions = buildQuestions(configs[selectedConfigIndex], userMsg.user, bot);
-
-          bot.startConversation(userMsg, questions[0]);
-        });
-      });
+        bot.startConversation(userMsg, questions[0]);
+      }
     }
-    else {
-      const questions = buildQuestions(configs[0], userMsg.user, bot);
+  );
 
-      bot.startConversation(userMsg, questions[0]);
+  smartBot.hears(
+    [regWrapCmd(COMMANDS.help.text)],
+    ['direct_message'],
+    (bot, userMsg) => {
+      sendHelpMessage(userMsg.user);
     }
-  });
+  );
 
-  smartBot.hears([regWrapCmd(COMMANDS.help.text)], ['direct_message'], (bot, userMsg) => {
-    sendHelpMessage(userMsg.user);
-  });
+  smartBot.hears(
+    [regWrapCmd(COMMANDS.questions.text)],
+    ['direct_message'],
+    (bot, userMsg) => {
+      const configs = userMgmt.getUserConfigs(userMsg.user);
 
-  smartBot.hears([regWrapCmd(COMMANDS.questions.text)], ['direct_message'], (bot, userMsg) => {
-    const configs = userMgmt.getUserConfigs(userMsg.user);
+      if (configs.length > 1) {
+        const leadMsg = `Which team? Please enter a number [1-${
+          configs.length
+        }]`;
+        const configMsg = configs
+          .map((config, index) => `${index + 1}) ${config.id}`)
+          .join('\n>');
+        let selectedConfigIndex = -1; // eslint-disable-line no-unused-vars
 
-    if (configs.length > 1) {
-      const leadMsg = `Which team? Please enter a number [1-${configs.length}]`;
-      const configMsg = configs.map((config, index) => `${index + 1}) ${config.id}`).join('\n>');
-      let selectedConfigIndex = -1; // eslint-disable-line no-unused-vars
+        bot.startConversation(userMsg, (err, convo) => {
+          const choices = configs.map((config, index) =>
+            // eslint-disable-line arrow-body-style
+            ({
+              pattern: regWrapCmd(index + 1),
+              callback: (response, convo) => {
+                selectedConfigIndex = index;
+                sendQuestionsMessages(userMsg.user, configs[index].id);
+                convo.next();
+              }
+            })
+          );
 
-      bot.startConversation(userMsg, (err, convo) => {
-        const choices = configs.map((config, index) => { // eslint-disable-line arrow-body-style
-          return {
-            pattern: regWrapCmd(index + 1),
+          choices.push({
+            default: true,
             callback: (response, convo) => {
-              selectedConfigIndex = index;
-              sendQuestionsMessages(userMsg.user, configs[index].id);
+              convo.repeat();
               convo.next();
             }
-          };
+          });
+
+          convo.ask(`${leadMsg}\n>${configMsg}`, choices);
         });
-
-        choices.push({
-          default: true,
-          callback: (response, convo) => {
-            convo.repeat();
-            convo.next();
-          }
-        });
-
-        convo.ask(`${leadMsg}\n>${configMsg}`, choices);
-      });
+      }
+      else if (configs.length === 1) {
+        sendQuestionsMessages(userMsg.user, configs[0].id);
+      }
+      else {
+        sendSignUpMessage(userMsg.user);
+      }
     }
-    else if (configs.length === 1) {
-      sendQuestionsMessages(userMsg.user, configs[0].id);
+  );
+
+  smartBot.hears(
+    [regWrapCmd(COMMANDS.usage.text)],
+    ['direct_message'],
+    (bot, userMsg) => {
+      sendUsageMessage(userMsg.user);
     }
-    else {
-      sendSignUpMessage(userMsg.user);
-    }
-  });
+  );
 
-  smartBot.hears([regWrapCmd(COMMANDS.usage.text)], ['direct_message'], (bot, userMsg) => {
-    sendUsageMessage(userMsg.user);
-  });
+  smartBot.hears(
+    [regWrapCmd(COMMANDS.config.text)],
+    ['direct_message'],
+    (bot, userMsg) => {
+      const configs = userMgmt.getUserConfigs(userMsg.user);
 
-  smartBot.hears([regWrapCmd(COMMANDS.config.text)], ['direct_message'], (bot, userMsg) => {
-    const configs = userMgmt.getUserConfigs(userMsg.user);
+      if (!configs.length) {
+        // User is not in any config, requires setup
+        sendSignUpMessage(userMsg.user);
 
-    if (!configs.length) {
-      // User is not in any config, requires setup
-      sendSignUpMessage(userMsg.user);
+        return;
+      }
 
-      return;
-    }
+      const user = userMgmt.getSlackUser(userMsg.user);
+      const accessibleConfigs = configs.filter(config =>
+        config.admins.find(a => a.username === user.name)
+      );
 
-    const user = userMgmt.getSlackUser(userMsg.user);
-    const accessibleConfigs = configs.filter(config => config.admins.find(a => a.username === user.name));
+      if (!accessibleConfigs.length) {
+        sendSimpleMessage(userMsg.user, MESSAGES.noAccess);
 
-    if (!accessibleConfigs.length) {
-      sendSimpleMessage(userMsg.user, MESSAGES.noAccess);
+        return;
+      }
 
-      return;
-    }
+      if (accessibleConfigs.length > 1) {
+        const leadMsg = MESSAGES.whichTeam.replace(
+          /\$\{configs\.length\}/,
+          `${accessibleConfigs.length}`
+        );
+        const configMsg = accessibleConfigs
+          .map((config, index) => `${index + 1}) ${config.id}`)
+          .join('\n>');
 
-    if (accessibleConfigs.length > 1) {
-      const leadMsg = MESSAGES.whichTeam.replace(/\$\{configs\.length\}/, `${accessibleConfigs.length}`);
-      const configMsg = accessibleConfigs.map((config, index) => `${index + 1}) ${config.id}`).join('\n>');
+        bot.startConversation(userMsg, (err, convo) => {
+          const choices = accessibleConfigs.map((config, index) =>
+            // eslint-disable-line arrow-body-style
+            ({
+              pattern: regWrapCmd(index + 1),
+              callback: (response, convo) => {
+                sendConfigMessage(user.name, accessibleConfigs[index]);
+                convo.next();
+              }
+            })
+          );
 
-      bot.startConversation(userMsg, (err, convo) => {
-        const choices = accessibleConfigs.map((config, index) => { // eslint-disable-line arrow-body-style
-          return {
-            pattern: regWrapCmd(index + 1),
+          choices.push({
+            default: true,
             callback: (response, convo) => {
-              sendConfigMessage(user.name, accessibleConfigs[index]);
+              convo.repeat();
               convo.next();
             }
-          };
+          });
+
+          convo.ask(`${leadMsg}\n>${configMsg}`, choices);
         });
-
-        choices.push({
-          default: true,
-          callback: (response, convo) => {
-            convo.repeat();
-            convo.next();
-          }
-        });
-
-        convo.ask(`${leadMsg}\n>${configMsg}`, choices);
-      });
+      }
+      else if (accessibleConfigs.length === 1) {
+        sendConfigMessage(user.name, accessibleConfigs[0]);
+      }
     }
-    else if (accessibleConfigs.length === 1) {
-      sendConfigMessage(user.name, accessibleConfigs[0]);
-    }
-  });
+  );
 
-  smartBot.hears([regWrapCmd(COMMANDS.me.text)], ['direct_message'], (bot, userMsg) => {
-    sendUserSettings(userMsg.user);
-  });
+  smartBot.hears(
+    [regWrapCmd(COMMANDS.me.text)],
+    ['direct_message'],
+    (bot, userMsg) => {
+      sendUserSettings(userMsg.user);
+    }
+  );
 }
 
 function startStatusConversation(config) {
@@ -248,8 +314,7 @@ function startStatusConversation(config) {
     return; // No configured users, nothing to do
   }
 
-  config
-    .members
+  config.members
     .filter(member => !member.disableReminderMessage)
     .forEach(member => sendStatusIntroMessage(member.username, config));
 }
@@ -268,7 +333,11 @@ function startTicking(interval) {
     // First run
     const startInSeconds = 60 - moment().second() + 1; // Start 1 sec into the top of the minute
 
-    debugTicToc(debugTicToc.c.cyan(`Schedule processing will start at the top of the minute (${startInSeconds}sec)`));
+    debugTicToc(
+      debugTicToc.c.cyan(
+        `Schedule processing will start at the top of the minute (${startInSeconds}sec)`
+      )
+    );
 
     setTimeout(() => {
       debugTicToc(debugTicToc.c.cyan('Schedule processing started'));
@@ -294,22 +363,33 @@ function processNowForCheckins() {
       .tz(config.tz || 'America/New_York')
       .startOf('day')
       .add(schedule.hour, 'hour')
-      .add(schedule.minute, 'minute')
-      ;
+      .add(schedule.minute, 'minute');
 
     const todaysDoNotDisturbDate = userMgmt.getTodaysDoNotDisturbDate(config);
-    const isGoTime = now.minute() === checkinTime.minute() && now.hour() === checkinTime.hour() && !todaysDoNotDisturbDate;
+    const isGoTime
+      = now.minute() === checkinTime.minute()
+      && now.hour() === checkinTime.hour()
+      && !todaysDoNotDisturbDate;
 
     if (todaysDoNotDisturbDate) {
-      debugTicToc(debugTicToc.c.yellow(`Today is ${todaysDoNotDisturbDate.name}. No status messages today for ${config.id}.`));
+      debugTicToc(
+        debugTicToc.c.yellow(
+          `Today is ${
+            todaysDoNotDisturbDate.name
+          }. No status messages today for ${config.id}.`
+        )
+      );
 
       return;
     }
 
-    debugTicToc(`Checkin time for ${config.id} ${checkinTime.format()}`, JSON.stringify({
-      schedule: schedule,
-      isGoTime: isGoTime
-    }));
+    debugTicToc(
+      `Checkin time for ${config.id} ${checkinTime.format()}`,
+      JSON.stringify({
+        schedule: schedule,
+        isGoTime: isGoTime
+      })
+    );
 
     if (!isGoTime) {
       return;
@@ -320,52 +400,58 @@ function processNowForCheckins() {
 }
 
 function buildQuestions(config, username, bot) {
-  const questions = config.questions.map((question, questionIndex) => (response, convo) => {
-    wireUpConvoEndHandler(username, convo, config);
+  const questions = config.questions.map(
+    (question, questionIndex) => (response, convo) => {
+      wireUpConvoEndHandler(username, convo, config);
 
-    debugReceiveResponse(JSON.stringify(response));
+      debugReceiveResponse(JSON.stringify(response));
 
-    convo.ask(slackifier.slackifyMessage(question.text, '_'), (response, convo) => {
-      switch (response.text) {
-        case COMMANDS.start.text:
-          convo.isRestarted = true;
-          convo.stop();
+      convo.ask(
+        slackifier.slackifyMessage(question.text, '_'),
+        (response, convo) => {
+          switch (response.text) {
+            case COMMANDS.start.text:
+              convo.isRestarted = true;
+              convo.stop();
+              convo.next();
+              bot.startConversation(response, questions[0]);
+              return;
+            case COMMANDS.back.text:
+              if (questionIndex - 1 < 0) {
+                questions[0](response, convo);
+              }
+              else {
+                questions[questionIndex - 1](response, convo);
+              }
+              break;
+            case COMMANDS.stop.text:
+              convo.stop();
+              break;
+            case COMMANDS.help.text:
+              sendHelpMessage(username);
+              convo.repeat();
+              break;
+            case COMMANDS.questions.text:
+              sendQuestionsMessages(username, config.id);
+              convo.repeat();
+              break;
+            case COMMANDS.usage.text:
+              sendUsageMessage(username);
+              convo.repeat();
+              break;
+            default:
+              if (questionIndex < config.questions.length - 1) {
+                // Only ask the next question if there is one to ask
+                questions[questionIndex + 1](response, convo);
+              }
+              break;
+          }
+
           convo.next();
-          bot.startConversation(response, questions[0]);
-          return;
-        case COMMANDS.back.text:
-          if (questionIndex - 1 < 0) {
-            questions[0](response, convo);
-          }
-          else {
-            questions[questionIndex - 1](response, convo);
-          }
-          break;
-        case COMMANDS.stop.text:
-          convo.stop();
-          break;
-        case COMMANDS.help.text:
-          sendHelpMessage(username);
-          convo.repeat();
-          break;
-        case COMMANDS.questions.text:
-          sendQuestionsMessages(username, config.id);
-          convo.repeat();
-          break;
-        case COMMANDS.usage.text:
-          sendUsageMessage(username);
-          convo.repeat();
-          break;
-        default:
-          if (questionIndex < config.questions.length - 1) { // Only ask the next question if there is one to ask
-            questions[questionIndex + 1](response, convo);
-          }
-          break;
-      }
-
-      convo.next();
-    });
-  });
+        }
+      );
+    }
+  );
 
   return questions;
 }
@@ -381,12 +467,15 @@ function wireUpConvoEndHandler(username, convo, config) {
     switch (convo.status) {
       case 'completed':
         const users = userMgmt.getConfiguredUsers(username, config.id);
-        const responses = _(convo.responses).keys().map(key => { // eslint-disable-line
-          return {
-            question: key,
-            answer: convo.responses[key].text
-          };
-        });
+        const responses = _(convo.responses)
+          .keys()
+          .map(key =>
+            // eslint-disable-line
+            ({
+              question: key,
+              answer: convo.responses[key].text
+            })
+          );
 
         const statusSummary = {
           id: username,
@@ -399,7 +488,9 @@ function wireUpConvoEndHandler(username, convo, config) {
         let channels = '';
 
         if (config.channels.length === 2) {
-          channels = `#${config.channels[0]} and #${config.channels[1]} channels`;
+          channels = `#${config.channels[0]} and #${
+            config.channels[1]
+          } channels`;
         }
         else if (config.channels.length > 2) {
           config.channels.forEach((channel, index) => {
@@ -417,16 +508,22 @@ function wireUpConvoEndHandler(username, convo, config) {
 
         let message = MESSAGES.confirmation;
 
-        if (!_.get(config, 'customConfirmationMessage.disabled', false) && _.get(config, 'customConfirmationMessage.text')) {
+        if (
+          !_.get(config, 'customConfirmationMessage.disabled', false)
+          && _.get(config, 'customConfirmationMessage.text')
+        ) {
           if (config.customConfirmationMessage.isReplacement) {
             message = config.customConfirmationMessage.text;
           }
           else {
-            message = `${_.get(config, 'customConfirmationMessage.text')}\n${message}`;
+            message = `${_.get(
+              config,
+              'customConfirmationMessage.text'
+            )}\n${message}`;
           }
         }
 
-        message = message.replace(/\$\{channels\}/ig, `${channels}`);
+        message = message.replace(/\$\{channels\}/gi, `${channels}`);
 
         sendSimpleMessage(username, message);
         break;
@@ -455,8 +552,9 @@ function sendHelpMessage(username) {
 
   _(COMMANDS)
     .keys()
-    .forEach(key => msgs.push(`> \`${COMMANDS[key].text}\` ${COMMANDS[key].info}`))
-    ;
+    .forEach(key =>
+      msgs.push(`> \`${COMMANDS[key].text}\` ${COMMANDS[key].info}`)
+    );
 
   sendSimpleMessage(username, msgs.join('\n'));
 }
@@ -468,18 +566,34 @@ function sendUsageMessage(username) {
   msgs.push('Ticket links');
   msgs.push('> When you enter something like:');
   msgs.push('>    Finished work on BUG-123');
-  msgs.push('> Status Bot will automatically linkify the ticket number for you:');
-  msgs.push('>    Finished work on <https://underarmour.atlassian.net/browse/BUG-123|BUG-123>');
+  msgs.push(
+    '> Status Bot will automatically linkify the ticket number for you:'
+  );
+  msgs.push(
+    '>    Finished work on <https://underarmour.atlassian.net/browse/BUG-123|BUG-123>'
+  );
   msgs.push('Pull Request links');
   msgs.push('> When you enter a PR url like:');
-  msgs.push('>    Waiting for https://github.com/doc/flux-capacitor/pull/4 to get merged');
-  msgs.push('> Status Bot will automatically linkify and replace the url with a cleaner message:');
-  msgs.push('>    Waiting for <https://github.com/doc/flux-capacitor/pull/4|:arrow_heading_up: PR #4 for doc/flux-capacitor>');
+  msgs.push(
+    '>    Waiting for https://github.com/doc/flux-capacitor/pull/4 to get merged'
+  );
+  msgs.push(
+    '> Status Bot will automatically linkify and replace the url with a cleaner message:'
+  );
+  msgs.push(
+    '>    Waiting for <https://github.com/doc/flux-capacitor/pull/4|:arrow_heading_up: PR #4 for doc/flux-capacitor>'
+  );
   msgs.push('Code Review links');
   msgs.push('> When you enter a CR url like:');
-  msgs.push('>    Waiting for https://github.com/doc/flux-capacitor/compare/master...marty:hoverboard to get merged');
-  msgs.push('> Status Bot will automatically linkify and replace the url with a cleaner message:');
-  msgs.push('>    Waiting for <https://github.com/doc/flux-capacitor/compare/master...marty:hoverboard|:mag_right: CR doc/flux-capacitor:master...marty:delorean> to get merged');
+  msgs.push(
+    '>    Waiting for https://github.com/doc/flux-capacitor/compare/master...marty:hoverboard to get merged'
+  );
+  msgs.push(
+    '> Status Bot will automatically linkify and replace the url with a cleaner message:'
+  );
+  msgs.push(
+    '>    Waiting for <https://github.com/doc/flux-capacitor/compare/master...marty:hoverboard|:mag_right: CR doc/flux-capacitor:master...marty:delorean> to get merged'
+  );
 
   sendSimpleMessage(username, msgs.join('\n'));
 }
@@ -504,13 +618,19 @@ function sendQuestionsMessages(username, configId) {
   }
 
   configs.forEach(config => {
-    const questionsMessages = config.questions.map((question, index) => `\n>${index + 1}) _${question.text}_`).join('');
-    const message = `Here are the questions you will be asked for *${config.id}*:${questionsMessages}`;
+    const questionsMessages = config.questions
+      .map((question, index) => `\n>${index + 1}) _${question.text}_`)
+      .join('');
+    const message = `Here are the questions you will be asked for *${
+      config.id
+    }*:${questionsMessages}`;
 
-    debugQuestionsMessages(JSON.stringify({
-      username: username,
-      questionMessage: message
-    }));
+    debugQuestionsMessages(
+      JSON.stringify({
+        username: username,
+        questionMessage: message
+      })
+    );
 
     sendSimpleMessage(username, message);
   });
@@ -520,9 +640,15 @@ function sendStatusSummary(statusSummary, config) {
   const summary = attachmentsBuilder.build(statusSummary);
   const message = slackifier.slackifyMessage(
     MESSAGES.statusTitle
-      .replace(/\$\{config\.id\}/ig, `${config.id}`)
-      .replace(/\$\{statusSummary\.user\.profile\.real_name\}/ig, `${statusSummary.user.profile.real_name}`)
-      .replace(/\$\{statusSummary\.user\.name\}/ig, `${statusSummary.user.name}`),
+      .replace(/\$\{config\.id\}/gi, `${config.id}`)
+      .replace(
+        /\$\{statusSummary\.user\.profile\.real_name\}/gi,
+        `${statusSummary.user.profile.real_name}`
+      )
+      .replace(
+        /\$\{statusSummary\.user\.name\}/gi,
+        `${statusSummary.user.name}`
+      ),
     '',
     summary.attachments
   );
@@ -539,10 +665,15 @@ function sendSignUpMessage(username) {
 }
 
 function sendConfigMessage(username, config) {
-  const title = `${_.snakeCase(config.id).replace(/[_]/ig, '-')}.json`;
+  const title = `${_.snakeCase(config.id).replace(/[_]/gi, '-')}.json`;
   const redactedConfig = userMgmt.redactConfig(config);
 
-  sendSnippet(username, title, JSON.stringify(redactedConfig, null, 2), 'javascript');
+  sendSnippet(
+    username,
+    title,
+    JSON.stringify(redactedConfig, null, 2),
+    'javascript'
+  );
 }
 
 function sendUserSettings(username) {
@@ -570,11 +701,12 @@ function sendUserSettings(username) {
   dumbBot.postMessageToUser(user.name, '', message);
 
   function buildUserSettingsAttacment(config, member) {
-    let msg = _.keys(member)
-      .filter(key => key !== 'username')
-      .map(key => `${key}: ${member[key]}`)
-      .join('\n') || `color: ${process.env.ANSWER_FALLBACK_HEX_COLOR} (default)`
-      ;
+    let msg
+      = _.keys(member)
+        .filter(key => key !== 'username')
+        .map(key => `${key}: ${member[key]}`)
+        .join('\n')
+      || `color: ${process.env.ANSWER_FALLBACK_HEX_COLOR} (default)`;
 
     if ((config.admins || []).find(a => a.username === member.username)) {
       msg = `isAdmin: true\n${msg}`;
@@ -585,10 +717,7 @@ function sendUserSettings(username) {
       fallback: '',
       color: member.color || process.env.ANSWER_FALLBACK_HEX_COLOR,
       pretext: `*${config.id}*`,
-      mrkdwn_in: [
-        'pretext',
-        'text'
-      ],
+      mrkdwn_in: ['pretext', 'text'],
       text: msg
       /* eslint-enable camelcase */
     };
@@ -606,7 +735,7 @@ function sendSnippet(username, title, content, filetype) {
     filetype: filetype,
     channels: `@${username}`,
     username: 'Status Bot',
-    icon_url: 'http://loadion.com/ii/69999096_00d791ea82.gif' // eslint-disable-line
+    icon_url: "http://loadion.com/ii/69999096_00d791ea82.gif" // eslint-disable-line
   };
 
   const requestOptions = {
@@ -627,10 +756,14 @@ function sendSnippet(username, title, content, filetype) {
 
 function sendStatusIntroMessage(username, config) {
   const user = userMgmt.getSlackUser(username);
-  const introMessage = slackifier.slackifyMessage(MESSAGES.start
-    .replace(/\$\{user\.profile\.first_name\}/ig, `${user.profile.first_name}`)
-    .replace(/\$\{configId\}/ig, `${config.id}`)
-    .replace(/\$\{COMMANDS\.start\.text\}/ig, `${COMMANDS.start.text}`)
+  const introMessage = slackifier.slackifyMessage(
+    MESSAGES.start
+      .replace(
+        /\$\{user\.profile\.first_name\}/gi,
+        `${user.profile.first_name}`
+      )
+      .replace(/\$\{configId\}/gi, `${config.id}`)
+      .replace(/\$\{COMMANDS\.start\.text\}/gi, `${COMMANDS.start.text}`)
   );
 
   dumbBot.postMessageToUser(username, '', introMessage);
